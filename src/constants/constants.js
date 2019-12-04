@@ -1,0 +1,1 @@
+export const DATE_FORMAT_APOD_API = "YYYY-MM-DD";
