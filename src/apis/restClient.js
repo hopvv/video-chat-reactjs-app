@@ -1,5 +1,5 @@
 import axios from "axios";
-import config from "../../config";
+import config from "../../configs/config";
 
 import urls from "../constants/urls";
 import * as Methods from "../constants/methods";
