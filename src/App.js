@@ -7,9 +7,11 @@ import {
 import APODComponent from "./components/APODComponent";
 import routes from "./constants/routes";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { fab } from '@fortawesome/free-brands-svg-icons'
+import {fab} from '@fortawesome/free-brands-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons'
 
-library.add(fab);
+// any of the brand icons in package may be referenced by icon name as a string anywhere else in our app
+library.add(fas, fab);
 
 export default class App extends React.Component {
   constructor(props) {

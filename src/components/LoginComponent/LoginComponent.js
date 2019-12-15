@@ -59,13 +59,13 @@ class LoginComponent extends React.Component{
                     className="btn btn-lg btn-google btn-block text-uppercase btn-flex-icon"
                     onClick={this.handleProcessLoginGoogleAccount}
                   >
-                    <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
+                    <FontAwesomeIcon icon={['fab', 'google']} /> Sign in with Google
                   </button>
                   <button
                     className="btn btn-lg btn-facebook btn-block text-uppercase"
                     onClick={this.handleProcessLoginFacebookAccount}
                   >
-                    <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
+                    <FontAwesomeIcon icon={['fab', 'facebook']} /> Sign in with Facebook
                   </button>
                 </form>
               </div>
