@@ -1,17 +1,14 @@
 import React from "react";
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 import {TIME_CHANGE_SLIDE_APOD} from "../../constants/config";
 
-import {
-  Carousel
-} from 'react-bootstrap';
+import {Carousel} from 'react-bootstrap';
 
-import {getAPODs} from "../../actions";
-import keyOfTheDayReducer from "../../reducers/keyOfTheDayReducer";
+import {getAPODs} from "../../actions/APODActions";
 import "./styles.scss";
 
-class APODComponent extends React.Component{
+class APODComponent extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -19,7 +16,7 @@ class APODComponent extends React.Component{
   componentDidMount() {
     this.props.getAPODs();
   }
-  
+
   render() {
     const {
       keyOfTheDayReducer
@@ -55,6 +52,6 @@ class APODComponent extends React.Component{
 }
 
 export default connect(
-  state => ({ keyOfTheDayReducer: state.keyOfTheDayReducer }),
-  { getAPODs },
+  state => ({keyOfTheDayReducer: state.keyOfTheDayReducer}),
+  {getAPODs},
 )(APODComponent)

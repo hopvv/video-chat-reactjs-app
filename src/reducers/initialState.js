@@ -1,5 +1,4 @@
 export default {
-  keyOfTheDayReducer: {
-    
-  }
+  keyOfTheDayReducer: {},
+  authReducer: {}
 }

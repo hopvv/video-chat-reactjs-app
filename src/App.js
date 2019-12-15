@@ -2,6 +2,7 @@ import React from 'react';
 import "./styles/styles.scss";
 import {Route, Switch,} from "react-router-dom";
 import routes from "./constants/routes";
+import APODComponent from "./components/APODComponent";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {fab} from '@fortawesome/free-brands-svg-icons'
 import {fas} from '@fortawesome/free-solid-svg-icons'
@@ -34,7 +35,7 @@ export default class App extends React.Component {
     return (
       <div className={"app"}>
         {this.getSwitchRouter()}
-        {/*<APODComponent />*/}
+        {/*<APODComponent/>*/}
       </div>
     );
   }

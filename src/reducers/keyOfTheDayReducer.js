@@ -1,9 +1,9 @@
 import initialState from "./initialState";
-import {forEach} from "react-bootstrap/cjs/ElementChildren";
+import Types from "../constants/types";
 
 export default function keyOfTheDayReducer(state = initialState.keyOfTheDayReducer, action) {
   switch (action.type) {
-    case "GET_APOD_SUCCESS": {
+    case Types.GET_APOD_SUCCESS: {
       const newState = {
         ...state,
         [action.date]: action.data
