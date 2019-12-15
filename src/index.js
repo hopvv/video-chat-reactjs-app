@@ -15,7 +15,6 @@ import {
 } from "react-router-dom";
 
 import App from './App';
-import routes from "./constants/routes";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
@@ -26,7 +25,7 @@ sagaMiddleware.run(rootSaga)
 // Render App component to html
 render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter  basename="/chat-app">
       <App />
     </BrowserRouter>
   </Provider>,
