@@ -8,25 +8,24 @@ import createSagaMiddleware from 'redux-saga';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
 
+import routes from "./constants/routes";
 import {
-  BrowserRouter,
-  Switch,
-  Route,
+  BrowserRouter
 } from "react-router-dom";
 
 import App from './App';
 
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-sagaMiddleware.run(rootSaga)
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+sagaMiddleware.run(rootSaga);
 
 // Import main app
 
 // Render App component to html
 render(
   <Provider store={store}>
-    <BrowserRouter  basename="/chat-app">
-      <App />
+    <BrowserRouter basename="chat-app">
+      <App routes={routes}/>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

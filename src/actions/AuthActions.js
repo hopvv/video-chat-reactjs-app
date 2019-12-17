@@ -4,6 +4,10 @@ export function login(email, password) {
   return {type: Types.LOGIN_REQUEST, email, password}
 }
 
+export function loginGoogleAccount() {
+  return {type: Types.LOGIN_GOOGLE_ACCOUNT_REQUEST}
+}
+
 export function logout() {
   return {type: Types.LOGOUT_REQUEST}
 }

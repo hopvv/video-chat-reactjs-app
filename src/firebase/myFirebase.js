@@ -19,3 +19,7 @@ firebase.firestore().settings({
 export const myFirebase = firebase;
 export const myFirestore = firebase.firestore();
 export const myStorage = firebase.storage();
+
+/**
+ * Firebase auto save user data on local storage
+ */

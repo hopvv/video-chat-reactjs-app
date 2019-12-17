@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.scss";
 import {myFirebase} from "../../firebase/myFirebase";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {login} from "../../actions/AuthActions";
+import {login, loginGoogleAccount} from "../../actions/AuthActions";
 import {connect} from "react-redux";
 
 class LoginComponent extends React.Component {
@@ -20,15 +20,7 @@ class LoginComponent extends React.Component {
   }
 
   handleProcessLoginGoogleAccount() {
-    myFirebase
-      .auth()
-      .signInWithPopup(new myFirebase.auth.GoogleAuthProvider())
-      .then(async result => {
-        console.log("result", result);
-      })
-      .catch(err => {
-        console.log("Error auth Google Account: ", err);
-      })
+    this.props.loginGoogleAccount();
   }
 
   handleProcessLoginFacebookAccount() {
@@ -122,5 +114,5 @@ LoginComponent.propTypes = {};
 export default connect(
   state => (state),
   // state => ({keyOfTheDayReducer: state.keyOfTheDayReducer}),
-  {login},
+  {login, loginGoogleAccount},
 )(LoginComponent)
