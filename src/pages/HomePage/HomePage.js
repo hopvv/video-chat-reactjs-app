@@ -1,7 +1,7 @@
 import React from "react";
 import Proptypes from "prop-types";
 import "./styles.scss";
-import ConversationView from "../../components/ConversationView/ConversationView";
+import ConversationView from "../../views/ConversationView/ConversationView";
 
 class HomePage extends React.PureComponent {
   constructor(props) {
