@@ -1,2 +1,9 @@
 @import "../../styles/vars";
 
+.home-page {
+  @include e('chat') {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+

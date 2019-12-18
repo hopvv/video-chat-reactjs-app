@@ -51,13 +51,18 @@ html {
   body {
     background: url("../../static/images/backgrounds/starry-sky-background_640.jpg") round;
     height: 100%;
+    #root {
+      height: 100%;
+    }
   }
 }
 
 .app {
   max-width: 1200px;
-  width: 100%;
   margin: 0 auto;
+  background: #7F7FD5;
+  background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+  background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
 }
 
 .btn-flex-icon {

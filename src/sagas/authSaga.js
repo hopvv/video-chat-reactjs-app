@@ -25,7 +25,7 @@ function* loginGoogleAccount() {
     console.log("login user", user)
     yield put({type: Types.LOGIN_SUCCESS, data: user});
   } catch(error) {
-    const error_message = { code: error.code, message: error.message };
+    const error_message = { code: error.codhomee, message: error.message };
     yield put({type: Types.LOGIN_FAILURE, data: error_message});
   }
 }

@@ -1,13 +1,11 @@
 import React from 'react';
 import "./styles/styles.scss";
-import {Route, Switch, Redirect} from "react-router-dom";
+import {Redirect, Switch} from "react-router-dom";
 import {RouteWithSubRoutes} from "./constants/routes";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {fab} from '@fortawesome/free-brands-svg-icons'
 import {fas} from '@fortawesome/free-solid-svg-icons'
 import {connect} from "react-redux";
-import {login, loginGoogleAccount} from "./actions/AuthActions";
-import authReducer from "./reducers/authReducer";
 
 // any of the brand icons in package may be referenced by icon name as a string anywhere else in our app
 library.add(fas, fab);
@@ -17,7 +15,7 @@ class App extends React.Component {
     super(props);
     this.getSwitchRouter = this.getSwitchRouter.bind(this);
   }
-  
+
   getSwitchRouter() {
     const {routes} = this.props;
     if (this.props.authReducer.loggedIn) {
@@ -40,11 +38,10 @@ class App extends React.Component {
       );
     }
   }
-  
+
   render() {
-    console.log("this.props", this.props);
     return (
-      <div className={"app"}>
+      <div className={"container-fluid h-100 app"}>
         {this.getSwitchRouter()}
       </div>
     );
