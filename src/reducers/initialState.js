@@ -1,5 +1,10 @@
+import Immutable from 'seamless-immutable';
+import User from "../models/user";
+
 export default {
-  keyOfTheDayReducer: {
-    
-  }
+  keyOfTheDayReducer: Immutable({}),
+  authReducer: Immutable(Object.assign(new User(), {
+    loading: false,
+    loggedIn: true
+  }))
 }

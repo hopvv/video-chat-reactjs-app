@@ -6,11 +6,6 @@
     @content;
   }
 }
-@mixin e1($element) {
-  &___#{$element} {
-    @content;
-  }
-}
 
 /// Block Modifier
 /// @access public

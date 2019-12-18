@@ -1,0 +1,54 @@
+@import "../../styles/vars";
+
+.card {
+  height: 500px;
+  border-radius: 15px !important;
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  @include e('header') {
+    border-radius: 15px 15px 0 0 !important;
+    border-bottom: 0 !important;
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgba(0,0,0,.03);
+  }
+  @include e('body') {
+    padding:  0.75rem 0 !important;
+    overflow-y: auto;
+    white-space: nowrap;
+    flex: 1 1 auto;
+  }
+  @include e('footer') {
+    border-radius: 0 0 15px 15px !important;
+    border-top: 0 !important;
+    padding: .75rem 1.25rem;
+    background-color: rgba(0,0,0,.03);
+  }
+}
+
+.search {
+  border-radius: 15px 0 0 15px !important;
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  border: 0 !important;
+  color: white !important;
+
+  &:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+  }
+
+  @include e('btn') {
+    border-radius: 0 15px 15px 0 !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    border: 0 !important;
+    color: white !important;
+    cursor: pointer;
+  }
+}
