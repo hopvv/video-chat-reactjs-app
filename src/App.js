@@ -1,7 +1,7 @@
 import React from 'react';
 import "./styles/styles.scss";
 import {Redirect, Switch} from "react-router-dom";
-import {RouteWithSubRoutes} from "./constants/routes";
+import routes, {RouteWithSubRoutes} from "./constants/routes";
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {fab} from '@fortawesome/free-brands-svg-icons'
 import {fas} from '@fortawesome/free-solid-svg-icons'
@@ -19,23 +19,15 @@ class App extends React.Component {
 
   getSwitchRouter() {
     const {routes} = this.props;
-    // if (this.props.authReducer.loggedIn) {
-    //   console.log("loggedIn")
-      return (
-        <Switch>
-          {routes && routes.length > 0 && routes.map((route, i) => {
-            return (
-              <RouteWithSubRoutes key={i} {...route} loggedIn={this.props.authReducer.loggedIn}/>
-            );
-          })}
-        </Switch>
-      );
-    // } else {
-    //   console.log("NOT loggedIn");
-    //   return (
-        {/*<Redirect to="/login"/>*/}
-      // );
-    // }
+    return (
+      <Switch>
+        {routes && routes.length > 0 && routes.map((route, i) => {
+          return (
+            <RouteWithSubRoutes key={i} {...route} loggedIn={this.props.authReducer.loggedIn} {...this.props}/>
+          );
+        })}
+      </Switch>
+    );
   }
 
   render() {

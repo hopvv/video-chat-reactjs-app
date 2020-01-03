@@ -4,6 +4,7 @@ import {myFirebase} from "../../firebase/myFirebase";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {login, loginGoogleAccount} from "../../actions/AuthActions";
 import {connect} from "react-redux";
+import authReducer from "../../reducers/authReducer";
 
 class LoginComponent extends React.Component {
   constructor(props) {
@@ -18,35 +19,48 @@ class LoginComponent extends React.Component {
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
   }
-
+  
+  static getDerivedStateFromProps(props, state) {
+    // if ()
+  }
+  
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.authReducer.loggedIn && !prevProps.authReducer.loggedIn) {
+      this.props.history.push("/home-page");
+    }
+  }
+  
   async handleProcessLoginGoogleAccount() {
-    const user = await this.props.loginGoogleAccount();
-    if (user) {
-      this.props.history.push("/home-page");
-    }
+    this.props.loginGoogleAccount();
+    // const user = await
+    // if (user) {
+    //   this.props.history.push("/home-page");
+    // }
   }
-
+  
   handleProcessLoginFacebookAccount() {
-
+  
   }
-
-   handleLoginByEmail = async () => {
-    const user = await this.props.login(this.state.email, this.state.password);
-    if (user) {
-      this.props.history.push("/home-page");
-    }
+  
+  async handleLoginByEmail() {
+    this.props.login(this.state.email, this.state.password);
+    // const user = await
+    // if (user) {
+    //   console.log("user", user);
+    //   this.props.history.push("/home-page");
+    // }
   }
-
+  
   onChangeEmail(event) {
     event.preventDefault();
     this.setState({email: event.target.value});
   }
-
+  
   onChangePassword(event) {
     event.preventDefault();
     this.setState({password: event.target.value});
   }
-
+  
   render() {
     return (
       <div className="container">
@@ -69,7 +83,7 @@ class LoginComponent extends React.Component {
                     />
                     <label htmlFor="inputEmail">Email address</label>
                   </div>
-
+                  
                   <div className="form-label-group">
                     <input
                       type="password"
@@ -82,16 +96,17 @@ class LoginComponent extends React.Component {
                     />
                     <label htmlFor="inputPassword">Password</label>
                   </div>
-
+                  
                   {/*<div className="custom-control custom-checkbox mb-3">*/}
                   {/*  <input type="checkbox" className="custom-control-input" id="customCheck1"/>*/}
                   {/*    <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>*/}
                   {/*</div>*/}
                   <hr className="my-4"/>
-                  <button 
+                  <button
                     className="btn btn-lg btn-primary btn-block text-uppercase"
                     onClick={this.handleLoginByEmail}
-                  >Sign in</button>
+                  >Sign in
+                  </button>
                   <hr className="my-4"/>
                   <button
                     className="btn btn-lg btn-google btn-block text-uppercase btn-flex-icon"
@@ -118,7 +133,7 @@ class LoginComponent extends React.Component {
 LoginComponent.propTypes = {};
 
 export default connect(
-  state => (state),
-  // state => ({keyOfTheDayReducer: state.keyOfTheDayReducer}),
+  // state => (state),
+  state => ({authReducer: state.authReducer}),
   {login, loginGoogleAccount},
 )(LoginComponent)

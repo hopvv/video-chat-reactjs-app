@@ -1,5 +1,7 @@
+import noProfile from "../../static/images/profiles/no-profile.jpg";
+
 const Images = {
-  noProfile: require("../../static/images/profiles/no-profile.jpg").default
+  noProfile
 };
 
 export default Images;

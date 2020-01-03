@@ -18,12 +18,10 @@ function* login({email, password}) {
 }
 
 function* progressFirebaseCloudStore(user) {
-  console.log("user", user);
   const userDocRef = yield myFirestore.collection(CONSTS.USERS).doc(user.uid);
   const doc = yield userDocRef.get();
   if (doc.exists) {
     const data = doc.data();
-    console.log("data", data);
     if (data) {
       setUserToLocalStorage({...user, ...data});
     }
