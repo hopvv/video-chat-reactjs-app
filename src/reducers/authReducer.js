@@ -4,9 +4,7 @@ import Types from "../constants/types";
 export default (state = initialState.authReducer, action) => {
   switch (action.type) {
     case Types.LOGIN_SUCCESS: {
-      console.log("action LOGIN_SUCCESS", action);
       state = state.merge({...action.data});
-      console.log("state", state);
       return state
         .set("loggedIn", true)
         .set("loading", false);

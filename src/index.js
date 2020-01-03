@@ -7,6 +7,7 @@ import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
+import {withRouter} from "react-router-dom"
 
 import routes from "./constants/routes";
 import {
@@ -20,12 +21,13 @@ const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(rootSaga);
 
 // Import main app
+const MainApp = withRouter(App);
 
 // Render App component to html
 render(
   <Provider store={store}>
     <BrowserRouter basename="chat-app">
-      <App routes={routes}/>
+      <MainApp routes={routes}/>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

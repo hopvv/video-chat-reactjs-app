@@ -19,16 +19,22 @@ class LoginComponent extends React.Component {
     this.onChangePassword = this.onChangePassword.bind(this);
   }
 
-  handleProcessLoginGoogleAccount() {
-    this.props.loginGoogleAccount();
+  async handleProcessLoginGoogleAccount() {
+    const user = await this.props.loginGoogleAccount();
+    if (user) {
+      this.props.history.push("/home-page");
+    }
   }
 
   handleProcessLoginFacebookAccount() {
 
   }
 
-  handleLoginByEmail() {
-    this.props.login(this.state.email, this.state.password);
+   handleLoginByEmail = async () => {
+    const user = await this.props.login(this.state.email, this.state.password);
+    if (user) {
+      this.props.history.push("/home-page");
+    }
   }
 
   onChangeEmail(event) {

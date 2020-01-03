@@ -5,6 +5,6 @@ export default {
   keyOfTheDayReducer: Immutable({}),
   authReducer: Immutable(Object.assign(new User(), {
     loading: false,
-    loggedIn: true
+    loggedIn: false
   }))
 }
