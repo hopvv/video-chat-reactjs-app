@@ -54,6 +54,18 @@ function setUserToLocalStorage(user) {
   }
 }
 
+function cleanUserLocalStorage() {
+  try {
+    localStorage.removeItem(CONSTS.ID);
+    localStorage.removeItem(CONSTS.DISPLAY_NAME);
+    localStorage.removeItem(CONSTS.PHOTO_URL);
+    localStorage.removeItem(CONSTS.DESCRIPTION);
+  } catch (e) {
+    console.error('Can not using localStorage', e);
+    throw e;
+  }
+}
+
 function* loginGoogleAccount() {
   try {
     const authProvider = yield new myFirebase.auth.GoogleAuthProvider();
@@ -69,7 +81,15 @@ function* loginGoogleAccount() {
 }
 
 function* logout() {
-  console.log("on logout saga")
+  try {
+    myFirebase.auth().signOut();
+    //TODO: Should clear cookie firebase if any
+    cleanUserLocalStorage();
+    yield put({type: Types.LOGOUT_SUCCESS});
+  } catch (e) {
+    const error_message = {code: error.code, message: error.message};
+    yield put({type: Types.LOGOUT_FAILURE, data: error_message});
+  }
 }
 
 function* verify() {

@@ -2,10 +2,16 @@ import React from "react";
 import Proptypes from "prop-types";
 import "./styles.scss";
 import ConversationView from "../../views/ConversationView/ConversationView";
+import {logout} from "../../actions/AuthActions";
+import {connect} from "react-redux";
 
 class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
+  }
+  
+  handleLogout() {
+    this.props.logout();
   }
   
   render() {
@@ -14,7 +20,13 @@ class HomePage extends React.PureComponent {
         <div className="col-md-4 col-xl-3 home-page__chat">
           <ConversationView />
         </div>
-        <div className="col-md-8 col-xl-6 home-page__chat">chat box</div>
+        <div className="col-md-8 col-xl-6 home-page__chat">
+          
+          <button
+            className="btn btn-lg btn-google btn-block text-uppercase btn-flex-icon"
+            onClick={this.handleLogout.bind(this)}
+          >logout</button>
+        </div>
       </div>
     );
   }
@@ -24,4 +36,8 @@ HomePage.propTypes = {
 
 };
 
-export default HomePage;
+export default connect(
+  (state) => ({
+  }),
+  {logout}
+)(HomePage);
