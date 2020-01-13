@@ -123,9 +123,7 @@ function* verify(dispatch) {
   
   
   const user = yield promise;
-  console.log("user", user);
   if(user) {
-    console.log("user mapped", User.mappingObject(user));
     // User is signed in.
     yield put({type: Types.VERIFY_SUCCESS, data: User.mappingObject(user)});
   } else {
