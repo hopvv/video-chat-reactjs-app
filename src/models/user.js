@@ -17,19 +17,19 @@ export default class User {
   
   static mappingObject(_o) {
     const u = new User();
-    if (_o.user) {
-      u.displayName = _o.user.displayName || "";
-      u.email = _o.user.email || "";
-      u.emailVerified = _o.user.emailVerified  || false;
-      u.isAnonymous = _o.user.isAnonymous || false;
-      u.phoneNumber = _o.user.phoneNumber || "";
-      u.photoURL = _o.user.photoURL || "";
-      u.uid = _o.user.uid || "";
-      u.createdAt = _o.user.metadata ? _o.user.metadata.a : "";
-      u.lastLoginAt = _o.user.metadata ? _o.user.metadata.b : "'";
-      u.apiKey = _o.user.l || "";
-      u.refreshToken = _o.user.refreshToken || "";
-      u.accessToken = _o.user.ma || "";
+    if (_o) {
+      u.displayName = _o.displayName || _o.email;
+      u.email = _o.email || "";
+      u.emailVerified = _o.emailVerified  || false;
+      u.isAnonymous = _o.isAnonymous || false;
+      u.phoneNumber = _o.phoneNumber || "";
+      u.photoURL = _o.photoURL || "";
+      u.uid = _o.uid || "";
+      u.createdAt = _o.metadata ? _o.metadata.a : "";
+      u.lastLoginAt = _o.metadata ? _o.metadata.b : "'";
+      u.apiKey = _o.l || "";
+      u.refreshToken = _o.refreshToken || "";
+      u.accessToken = _o.ma || "";
     }
     return u;
   }

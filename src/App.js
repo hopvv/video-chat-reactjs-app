@@ -6,7 +6,10 @@ import {library} from '@fortawesome/fontawesome-svg-core'
 import {fab} from '@fortawesome/free-brands-svg-icons'
 import {fas} from '@fortawesome/free-solid-svg-icons'
 import {connect} from "react-redux";
-import LoginComponent from "./components/LoginComponent";
+import * as Const from "./constants/constants";
+import {myFirebase} from './firebase/myFirebase';
+import {verify} from "./actions/AuthActions";
+import LoadingPage from "./components/LoadingPage/LoadingPage";
 
 // any of the brand icons in package may be referenced by icon name as a string anywhere else in our app
 library.add(fas, fab);
@@ -16,7 +19,13 @@ class App extends React.Component {
     super(props);
     this.getSwitchRouter = this.getSwitchRouter.bind(this);
   }
-
+  
+  componentDidMount() {
+    if (localStorage.getItem(Const.ACCESS_TOKEN)) {
+      this.props.verify();
+    }
+  }
+  
   getSwitchRouter() {
     const {routes} = this.props;
     return (
@@ -33,7 +42,10 @@ class App extends React.Component {
   render() {
     return (
       <div className={"container-fluid h-100 app"}>
-        {this.getSwitchRouter()}
+        {
+          this.props.authReducer.loading ?
+          <LoadingPage isFullScreen/> : this.getSwitchRouter()
+        }
       </div>
     );
   }
@@ -44,5 +56,5 @@ export default connect(
   (state) => ({
     authReducer: state.authReducer
   }),
-  {}
+  {verify}
 )(App);

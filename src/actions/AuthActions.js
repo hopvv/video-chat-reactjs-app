@@ -13,5 +13,5 @@ export function logout() {
 }
 
 export function verify(userId) {
-  return {type: Types.VERIFY_SUCCESS}
+  return {type: Types.VERIFY_REQUEST}
 }

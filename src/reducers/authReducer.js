@@ -5,6 +5,7 @@ export default (state = initialState.authReducer, action) => {
   switch (action.type) {
     case Types.LOGIN_SUCCESS: {
       state = state.merge({...action.data});
+      console.log("state", state)
       return state
         .set("loggedIn", true)
         .set("loading", false);
@@ -37,6 +38,9 @@ export default (state = initialState.authReducer, action) => {
     }
     case Types.VERIFY_SUCCESS: {
       console.log("action", action);
+      state = state.merge({...action.data})
+        .set("loggedIn", true)
+        .set("loading", false);
       return state;
     }
     default:

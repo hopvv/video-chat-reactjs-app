@@ -20,12 +20,13 @@ class LoginComponent extends React.Component {
     this.onChangePassword = this.onChangePassword.bind(this);
   }
   
-  static getDerivedStateFromProps(props, state) {
-    // if ()
-  }
+  // static getDerivedStateFromProps(props, state) {
+  //   // if ()
+  // }
   
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.authReducer.loggedIn && !prevProps.authReducer.loggedIn) {
+    if (this.props.authReducer.loggedIn) {
+      console.log("push to Home page");
       this.props.history.push("/home-page");
     }
   }

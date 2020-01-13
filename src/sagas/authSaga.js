@@ -4,13 +4,21 @@ import Types from "../constants/types";
 import User from "../models/user";
 import * as CONSTS from "../constants/constants";
 
+/**
+ *
+ * @param action: type Object
+ * @returns {IterableIterator<<"PUT", PutEffectDescriptor<{data: *, type: *}>>|<"CALL", CallEffectDescriptor>|IterableIterator<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>|*>|User>}
+ */
 function* login({email, password}) {
   try {
     const data = yield call([myFirebase.auth(), myFirebase.auth().signInWithEmailAndPassword], email, password);
-    const user = User.mappingObject(data);
-    yield progressFirebaseCloudStore(user);
-    yield put({type: Types.LOGIN_SUCCESS, data: user});
-    return user;
+    if (data) {
+      const user = User.mappingObject(data.user);
+      yield progressFirebaseCloudStore(user);
+      yield put({type: Types.LOGIN_SUCCESS, data: user});
+    } else {
+      yield put({type: Types.LOGIN_FAILURE, data: data});
+    }
   } catch (error) {
     const error_message = {code: error.code, message: error.message};
     yield put({type: Types.LOGIN_FAILURE, data: error_message});
@@ -48,6 +56,8 @@ function setUserToLocalStorage(user) {
     localStorage.setItem(CONSTS.DISPLAY_NAME, user.displayName || user.email);
     localStorage.setItem(CONSTS.PHOTO_URL, user.photoURL || "");
     localStorage.setItem(CONSTS.DESCRIPTION, user.des || "");
+    localStorage.setItem(CONSTS.ACCESS_TOKEN, user.accessToken || "");
+    localStorage.setItem(CONSTS.REFRESH_TOKEN, user.refreshToken || "");
   } catch (e) {
     console.error('Can not using localStorage', e);
     throw e;
@@ -60,6 +70,8 @@ function cleanUserLocalStorage() {
     localStorage.removeItem(CONSTS.DISPLAY_NAME);
     localStorage.removeItem(CONSTS.PHOTO_URL);
     localStorage.removeItem(CONSTS.DESCRIPTION);
+    localStorage.removeItem(CONSTS.ACCESS_TOKEN);
+    localStorage.removeItem(CONSTS.REFRESH_TOKEN);
   } catch (e) {
     console.error('Can not using localStorage', e);
     throw e;
@@ -70,10 +82,13 @@ function* loginGoogleAccount() {
   try {
     const authProvider = yield new myFirebase.auth.GoogleAuthProvider();
     const data = yield call([myFirebase.auth(), myFirebase.auth().signInWithPopup], authProvider);
-    const user = User.mappingObject(data);
-    yield progressFirebaseCloudStore(user);
-    yield put({type: Types.LOGIN_SUCCESS, data: user});
-    return user;
+    if (data) {
+      const user = User.mappingObject(data.user);
+      yield progressFirebaseCloudStore(user);
+      yield put({type: Types.LOGIN_SUCCESS, data: user});
+    } else {
+      yield put({type: Types.LOGIN_FAILURE, data: data});
+    }
   } catch (error) {
     const error_message = {code: error.code, message: error.message};
     yield put({type: Types.LOGIN_FAILURE, data: error_message});
@@ -92,8 +107,31 @@ function* logout() {
   }
 }
 
-function* verify() {
-  console.log("on verify saga")
+
+/*
+ * example handle async call back function:
+ * const { result, components } = yield call(() => new Fingerprint2().get((result, components) => ({ result, components })))
+ *
+ * or using eventChannel: more detail, please read on https://redux-saga.js.org/docs/advanced/Channels.html
+ */
+function* verify(dispatch) {
+  const promise = new Promise(resolve => {
+    myFirebase.auth().onAuthStateChanged((user) => {
+      resolve(user);
+    });
+  });
+  
+  
+  const user = yield promise;
+  console.log("user", user);
+  if(user) {
+    console.log("user mapped", User.mappingObject(user));
+    // User is signed in.
+    yield put({type: Types.VERIFY_SUCCESS, data: User.mappingObject(user)});
+  } else {
+    console.warn("No user is signed in.");
+    yield put({type: Types.LOGIN_FAILURE});
+  }
 }
 
 export function* watchLogin() {

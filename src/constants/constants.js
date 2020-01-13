@@ -5,3 +5,5 @@ export const USERS = "users";
 export const DISPLAY_NAME = "displayName";
 export const PHOTO_URL = "photoURL";
 export const DESCRIPTION = "des";
+export const ACCESS_TOKEN = "access_token";
+export const REFRESH_TOKEN = "refresh_token";
