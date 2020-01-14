@@ -14,6 +14,10 @@ export default (state = initialState.authReducer, action) => {
       console.log("action LOGIN_REQUEST", action);
       return state.set("loading", true);
     }
+    case Types.LOGIN_GOOGLE_ACCOUNT_REQUEST: {
+      console.log("action LOGIN_GOOGLE_ACCOUNT_REQUEST");
+      return state.set("loading", true);
+    }
     case Types.LOGIN_FAILURE: {
       console.log("action LOGIN_FAILURE", action);
       return state.set("loading", false);
