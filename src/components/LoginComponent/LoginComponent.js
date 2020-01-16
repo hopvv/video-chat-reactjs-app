@@ -11,7 +11,8 @@ class LoginComponent extends React.Component {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      hasLoggedIn: false
     };
     this.handleProcessLoginGoogleAccount = this.handleProcessLoginGoogleAccount.bind(this);
     this.handleProcessLoginFacebookAccount = this.handleProcessLoginFacebookAccount.bind(this);
@@ -20,15 +21,29 @@ class LoginComponent extends React.Component {
     this.onChangePassword = this.onChangePassword.bind(this);
   }
   
-  // static getDerivedStateFromProps(props, state) {
-  //   // if ()
-  // }
+  static getDerivedStateFromProps(props, state) {
+    // if ()
+    const newState = {};
+    if (!state.hasLoggedIn && props.authReducer.loggedIn) {
+      newState.hasLoggedIn = true;
+    }
+    if (props.authReducer.loggedIn && (!state.hasLoggedIn || !newState.hasLoggedIn)) {
+      console.log("push to Home page");
+      props.history.push("/home-page");
+      return null;
+    }
+    
+    if (Object.keys(newState).length > 0) {
+      return newState;
+    }
+    return null;
+  }
   
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.authReducer.loggedIn) {
-      console.log("push to Home page");
-      this.props.history.push("/home-page");
-    }
+    // if (this.props.authReducer.loggedIn) {
+    //   console.log("push to Home page");
+    //   this.props.history.push("/home-page");
+    // }
   }
   
   async handleProcessLoginGoogleAccount() {

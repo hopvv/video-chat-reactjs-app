@@ -4,9 +4,9 @@ import {Route, Redirect} from "react-router-dom";
 import React from "react";
 
 const routes = [
-  {exact: true, path: "/", component: HomePage, authRequire: true},
-  {exact: true, path: "/home-page", component: HomePage, routes: [], authRequire: true},
+  {exact: true, path: "/", component: LoginComponent, authRequire: false},
   {exact: true, path: "/login", component: LoginComponent},
+  {exact: true, path: "/home-page", component: HomePage, routes: [], authRequire: true},
   {exact: false, path: "*", component: () => <Redirect to="/login"/>}
 ];
 
