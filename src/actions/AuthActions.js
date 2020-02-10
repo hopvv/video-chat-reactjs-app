@@ -8,6 +8,10 @@ export function loginGoogleAccount() {
   return {type: Types.LOGIN_GOOGLE_ACCOUNT_REQUEST}
 }
 
+export function loginFacebookAccount() {
+  return {type: Types.LOGIN_FACEBOOK_ACCOUNT_REQUEST}
+}
+
 export function logout() {
   return {type: Types.LOGOUT_REQUEST}
 }

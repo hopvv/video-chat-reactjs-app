@@ -2,8 +2,9 @@ import React from "react";
 import "./styles.scss";
 import {myFirebase} from "../../firebase/myFirebase";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {login, loginGoogleAccount} from "../../actions/AuthActions";
+import {login, loginGoogleAccount, loginFacebookAccount} from "../../actions/AuthActions";
 import {connect} from "react-redux";
+import {CUSTOM_CONFIG_LOGIN} from "../../constants/config";
 import authReducer from "../../reducers/authReducer";
 
 class LoginComponent extends React.Component {
@@ -19,16 +20,15 @@ class LoginComponent extends React.Component {
     this.handleLoginByEmail = this.handleLoginByEmail.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    this.handleSignUpNewAccount = this.handleSignUpNewAccount.bind(this);
   }
   
   static getDerivedStateFromProps(props, state) {
-    // if ()
     const newState = {};
     if (!state.hasLoggedIn && props.authReducer.loggedIn) {
       newState.hasLoggedIn = true;
     }
     if (props.authReducer.loggedIn && (!state.hasLoggedIn || !newState.hasLoggedIn)) {
-      console.log("push to Home page");
       props.history.push("/home-page");
       return null;
     }
@@ -40,31 +40,22 @@ class LoginComponent extends React.Component {
   }
   
   componentDidUpdate(prevProps, prevState, snapshot) {
-    // if (this.props.authReducer.loggedIn) {
-    //   console.log("push to Home page");
-    //   this.props.history.push("/home-page");
-    // }
   }
   
   async handleProcessLoginGoogleAccount() {
     this.props.loginGoogleAccount();
-    // const user = await
-    // if (user) {
-    //   this.props.history.push("/home-page");
-    // }
   }
   
   handleProcessLoginFacebookAccount() {
+    this.props.loginFacebookAccount();
+  }
+  
+  handleSignUpNewAccount() {
   
   }
   
   async handleLoginByEmail() {
     this.props.login(this.state.email, this.state.password);
-    // const user = await
-    // if (user) {
-    //   console.log("user", user);
-    //   this.props.history.push("/home-page");
-    // }
   }
   
   onChangeEmail(event) {
@@ -117,25 +108,40 @@ class LoginComponent extends React.Component {
                   {/*  <input type="checkbox" className="custom-control-input" id="customCheck1"/>*/}
                   {/*    <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>*/}
                   {/*</div>*/}
+                  
                   <hr className="my-4"/>
-                  <button
+                  
+                  {CUSTOM_CONFIG_LOGIN.LOGIN_BY_EMAIL && <button
                     className="btn btn-lg btn-primary btn-block text-uppercase"
                     onClick={this.handleLoginByEmail}
                   >Sign in
-                  </button>
+                  </button>}
+                  
                   <hr className="my-4"/>
-                  <button
+                  
+                  {CUSTOM_CONFIG_LOGIN.LOGIN_BY_GOOGLE_ACCOUNT && <button
                     className="btn btn-lg btn-google btn-block text-uppercase btn-flex-icon"
                     onClick={this.handleProcessLoginGoogleAccount}
                   >
                     <FontAwesomeIcon icon={['fab', 'google']}/> Sign in with Google
-                  </button>
-                  <button
+                  </button>}
+                  
+                  {CUSTOM_CONFIG_LOGIN.LOGIN_BY_FACEBOOK_ACCOUNT && <button
                     className="btn btn-lg btn-facebook btn-block text-uppercase"
                     onClick={this.handleProcessLoginFacebookAccount}
                   >
                     <FontAwesomeIcon icon={['fab', 'facebook']}/> Sign in with Facebook
+                  </button>}
+  
+                  <hr className="my-4"/>
+                  
+                  <button
+                    className="btn btn-lg btn-light btn-block text-uppercase"
+                    onClick={this.handleSignUpNewAccount}
+                  >
+                    Sign up
                   </button>
+                  
                 </div>
               </div>
             </div>
@@ -151,5 +157,5 @@ LoginComponent.propTypes = {};
 export default connect(
   // state => (state),
   state => ({authReducer: state.authReducer}),
-  {login, loginGoogleAccount},
+  {login, loginGoogleAccount, loginFacebookAccount},
 )(LoginComponent)

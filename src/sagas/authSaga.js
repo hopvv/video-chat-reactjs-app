@@ -3,6 +3,10 @@ import {myFirebase, myFirestore} from "../firebase/myFirebase";
 import Types from "../constants/types";
 import User from "../models/user";
 import * as CONSTS from "../constants/constants";
+import {watchGetAPOD} from "./APODSaga";
+
+// To apply the default browser preference.
+myFirebase.auth().useDeviceLanguage();
 
 /**
  *
@@ -95,6 +99,27 @@ function* loginGoogleAccount() {
   }
 }
 
+function* loginFacebookAccount() {
+  try {
+    const authFacebookProvider = yield new myFirebase.auth.FacebookAuthProvider();
+    authFacebookProvider.addScope('user_birthday');
+    authFacebookProvider.setCustomParameters({
+      'display': 'popup'
+    });
+    const data = yield call([myFirebase.auth(), myFirebase.auth().signInWithPopup], authFacebookProvider);
+    if (data) {
+      const user = User.mappingObject(data.user);
+      yield progressFirebaseCloudStore(user);
+      yield put({type: Types.LOGIN_SUCCESS, data: user});
+    } else {
+      yield put({type: Types.LOGIN_FAILURE, data: data});
+    }
+  } catch (error) {
+    const error_message = {code: error.code, message: error.message};
+    yield put({type: Types.LOGIN_FAILURE, data: error_message});
+  }
+}
+
 function* logout() {
   try {
     myFirebase.auth().signOut();
@@ -132,18 +157,31 @@ function* verify(dispatch) {
   }
 }
 
-export function* watchLogin() {
+function* watchLogin() {
   yield takeLatest(Types.LOGIN_REQUEST, login);
 }
 
-export function* watchLoginGoogleAccount() {
+function* watchLoginGoogleAccount() {
   yield takeLatest(Types.LOGIN_GOOGLE_ACCOUNT_REQUEST, loginGoogleAccount);
 }
 
-export function* watchLogout() {
+function* watchLoginFacebookAccount() {
+  yield takeLatest(Types.LOGIN_FACEBOOK_ACCOUNT_REQUEST, loginFacebookAccount);
+}
+
+function* watchLogout() {
   yield takeLatest(Types.LOGOUT_REQUEST, logout);
 }
 
-export function* watchVerify() {
+function* watchVerify() {
   yield takeLatest(Types.VERIFY_REQUEST, verify);
 }
+
+export default [
+  fork(watchGetAPOD),
+  fork(watchLogin),
+  fork(watchLoginGoogleAccount),
+  fork(watchLoginFacebookAccount),
+  fork(watchLogout),
+  fork(watchVerify)
+];
