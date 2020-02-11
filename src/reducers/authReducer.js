@@ -38,7 +38,7 @@ export default (state = initialState.authReducer, action) => {
     }
     case Types.VERIFY_REQUEST: {
       console.log("action", action);
-      return state;
+      return state.set("loading", true);
     }
     case Types.VERIFY_SUCCESS: {
       console.log("action", action);
