@@ -43,7 +43,7 @@ class App extends React.Component {
   renderNavBar() {
     if (this.props.location.pathname === '/login') return null;
     return (
-      <NavBarView />
+      <NavBarView/>
     );
   }
 

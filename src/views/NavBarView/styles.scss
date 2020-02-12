@@ -6,3 +6,17 @@
     right: 0;
   }
 }
+
+.nav-bar-customize {
+  max-width: $maxWidthScreen;
+  margin: 0 auto;
+  .nav-link {
+    cursor: pointer;
+    &.active {
+      color: $colorFF;
+    }
+  }
+  .dropdown-item {
+    cursor: pointer;
+  }
+}
