@@ -1,11 +1,10 @@
 import React from "react";
 import "./styles.scss";
-import {myFirebase} from "../../firebase/myFirebase";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {login, loginGoogleAccount, loginFacebookAccount} from "../../actions/AuthActions";
 import {connect} from "react-redux";
 import {CUSTOM_CONFIG_LOGIN} from "../../constants/config";
-import authReducer from "../../reducers/authReducer";
+import {pathSignUp, pathHomePage} from "../../constants/routesConstant";
 
 class LoginComponent extends React.Component {
   constructor(props) {
@@ -29,7 +28,7 @@ class LoginComponent extends React.Component {
       newState.hasLoggedIn = true;
     }
     if (props.authReducer.loggedIn && (!state.hasLoggedIn || !newState.hasLoggedIn)) {
-      props.history.push("/home-page");
+      props.history.push(pathHomePage);
       return null;
     }
     
@@ -51,7 +50,7 @@ class LoginComponent extends React.Component {
   }
   
   handleSignUpNewAccount() {
-  
+    this.props.history.push(pathSignUp)
   }
   
   async handleLoginByEmail() {
@@ -139,7 +138,7 @@ class LoginComponent extends React.Component {
                     className="btn btn-lg btn-light btn-block text-uppercase"
                     onClick={this.handleSignUpNewAccount}
                   >
-                    Sign up
+                    Register new account
                   </button>
                   
                 </div>

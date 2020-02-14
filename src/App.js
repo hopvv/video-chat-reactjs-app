@@ -11,6 +11,7 @@ import {myFirebase} from './firebase/myFirebase';
 import {verify} from "./actions/AuthActions";
 import LoadingPage from "./components/LoadingPage/LoadingPage";
 import NavBarView from "./views/NavBarView";
+import {pathLoginPage, pathSignUp} from "./constants/routesConstant";
 
 // any of the brand icons in package may be referenced by icon name as a string anywhere else in our app
 library.add(fas, fab);
@@ -41,7 +42,10 @@ class App extends React.Component {
   }
   
   renderNavBar() {
-    if (this.props.location.pathname === '/login') return null;
+    if (
+      this.props.location.pathname === pathLoginPage ||
+      this.props.location.pathname === pathSignUp
+    ) return null;
     return (
       <NavBarView/>
     );

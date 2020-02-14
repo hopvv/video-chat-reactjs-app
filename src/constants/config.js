@@ -6,3 +6,7 @@ export const CUSTOM_CONFIG_LOGIN = {
   LOGIN_BY_GOOGLE_ACCOUNT: true,
   LOGIN_BY_FACEBOOK_ACCOUNT: false
 };
+
+export const MIN_LENGTH_USER_NAME = 6;
+export const MIN_LENGTH_PASSWORD = 6;
+export const MIN_LENGTH_PHONE_NUMBER = 9;

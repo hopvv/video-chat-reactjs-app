@@ -1,10 +1,18 @@
 import LoginComponent from "./components/LoginComponent";
 import LogoutComponent from "./components/LogoutComponent";
 import HomePage from "./pages/HomePage";
+import RegisterComponent from "./components/RegisterComponent/RegisterComponent";
 import {Route, Redirect} from "react-router-dom";
-import {pathLoginPage, pathLogoutPage, pathHomePage, pathAbout, pathProfile, pathProfiles} from "./constants/routesConstant";
+import {
+  pathLoginPage,
+  pathLogoutPage,
+  pathHomePage,
+  pathAbout,
+  pathProfile,
+  pathProfiles,
+  pathSignUp
+} from "./constants/routesConstant";
 import React from "react";
-
 
 const routes = [
   {exact: true, path: '/', component: LoginComponent, authRequire: false},
@@ -14,6 +22,7 @@ const routes = [
   {exact: true, path: pathAbout, component: () => <div>ABOUT PAGE</div>},
   {exact: true, path: pathProfile, component: () => <div>PROFILE PAGE</div>},
   {exact: true, path: pathProfiles, component: () => <div>LIST PROFILES</div>},
+  {exact: true, path: pathSignUp, component: RegisterComponent},
   {exact: false, path: "*", component: () => <Redirect to={pathLoginPage}/>},
 ];
 

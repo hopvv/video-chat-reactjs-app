@@ -5,10 +5,12 @@ export const LOGOUT = "logout";
 export const PROFILE = "profile";
 export const PROFILES = "profiles";
 export const ABOUT = "about";
+export const REGISTER = "register";
 
 export const pathLoginPage = `/${LOGIN}`;
 export const pathLogoutPage = `/${LOGOUT}`;
 export const pathHomePage = `/${HOME_PAGE}`;
+export const pathSignUp = `/${REGISTER}`;
 export const pathFullHomePage = `/${ROOT_APP}/${HOME_PAGE}`;
 export const pathProfile = `/${PROFILE}`;
 export const pathProfiles = `/${PROFILES}`;
