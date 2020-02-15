@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {login, loginGoogleAccount, loginFacebookAccount} from "../../actions/AuthActions";
+import {login, loginGoogleAccount, signOn} from "../../actions/AuthActions";
 import {connect} from "react-redux";
 import {pathLoginPage} from "../../constants/routesConstant";
 import {MIN_LENGTH_USER_NAME, MIN_LENGTH_PASSWORD, MIN_LENGTH_PHONE_NUMBER} from "../../constants/config";
@@ -35,32 +35,37 @@ class RegisterComponent extends React.Component {
   isValidDisplayName() {
     const invalid = !this.state.displayName || this.state.displayName.length < MIN_LENGTH_USER_NAME;
     this.setState({inValidDisplayName: invalid});
-    return invalid;
+    return !invalid;
   }
   
   isValidEmail() {
     const invalid = !this.state.email;
     this.setState({inValidEmail: invalid});
-    return invalid;
+    return !invalid;
   }
   
   isValidPassword() {
     const invalid = !this.state.password || this.state.password.length < MIN_LENGTH_PASSWORD;
     this.setState({inValidPassword: invalid});
-    return invalid;
+    return !invalid;
   }
   
   isValidPhoneNumber() {
     const invalid = !this.state.phoneNumber || this.state.phoneNumber.length < MIN_LENGTH_PHONE_NUMBER;
     this.setState({inValidPhoneNumber: invalid});
-    return invalid;
+    return !invalid;
   }
   
   handleSignUpNewAccount() {
     if (!this.isValidDisplayName() || !this.isValidEmail() || !this.isValidPassword() || !this.isValidPhoneNumber()) {
       return;
     }
-    console.log("REGISTER");
+    this.props.signOn({
+      displayName: this.state.displayName,
+      email: this.state.email,
+      password: this.state.password,
+      phoneNumber: this.state.phoneNumber,
+    });
   }
   
   handleNavigateToLoginPage() {
@@ -204,5 +209,5 @@ RegisterComponent.propTypes = {};
 export default connect(
   // state => (state),
   state => ({authReducer: state.authReducer}),
-  {login, loginGoogleAccount, loginFacebookAccount},
+  {login, loginGoogleAccount, signOn},
 )(RegisterComponent)

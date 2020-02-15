@@ -10,6 +10,32 @@ myFirebase.auth().useDeviceLanguage();
 
 /**
  *
+ * @param displayName
+ * @param email
+ * @param password
+ * @param phoneNumber
+ * @returns {IterableIterator<*>}
+ */
+function* signOn({displayName, email, password, phoneNumber}) {
+  try {
+    const data = yield call([myFirebase.auth(), myFirebase.auth().createUserWithEmailAndPassword], email, password);
+    console.log("data", data);
+    if (data) {
+      const user = User.mappingObject(data.user);
+      yield progressFirebaseCloudStore(Object.assign({}, {...user}, {displayName, phoneNumber}), true);
+      yield put({type: Types.SIGN_ON_SUCCESS, data: user});
+    } else {
+      yield put({type: Types.SIGN_ON_FAILURE, data: data});
+    }
+  } catch (error) {
+    console.error("Can not register new account:", error);
+    const error_message = {code: error.code, message: error.message};
+    yield put({type: Types.SIGN_ON_FAILURE, data: error_message});
+  }
+}
+
+/**
+ *
  * @param action: type Object
  * @returns {IterableIterator<<"PUT", PutEffectDescriptor<{data: *, type: *}>>|<"CALL", CallEffectDescriptor>|IterableIterator<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>|*>|User>}
  */
@@ -29,7 +55,13 @@ function* login({email, password}) {
   }
 }
 
-function* progressFirebaseCloudStore(user) {
+/**
+ *
+ * @param user Object
+ * @returns {IterableIterator<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>|*>}
+ */
+function* progressFirebaseCloudStore(user, keepNotSaveLocal) {
+  console.log("User progressFirebaseCloudStore", user);
   const userDocRef = yield myFirestore.collection(CONSTS.USERS).doc(user.uid);
   const doc = yield userDocRef.get();
   if (doc.exists) {
@@ -46,7 +78,7 @@ function* progressFirebaseCloudStore(user) {
         photoURL: user.photoURL
       };
       yield userDocRef.set(result);
-      setUserToLocalStorage({...user, ...result});
+      !keepNotSaveLocal && setUserToLocalStorage({...user, ...result});
     } catch (e) {
       console.error("Can not set data to firebase", e.message);
       throw e;
@@ -54,6 +86,10 @@ function* progressFirebaseCloudStore(user) {
   }
 }
 
+/**
+ *
+ * @param user Object
+ */
 function setUserToLocalStorage(user) {
   try {
     localStorage.setItem(CONSTS.ID, user.uid || "");
@@ -68,6 +104,9 @@ function setUserToLocalStorage(user) {
   }
 }
 
+/**
+ * Clean user local storage
+ */
 function cleanUserLocalStorage() {
   try {
     localStorage.removeItem(CONSTS.ID);
@@ -82,6 +121,10 @@ function cleanUserLocalStorage() {
   }
 }
 
+/**
+ * Loginby google account
+ * @returns {IterableIterator<IterableIterator<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>|*>|firebase.auth.GoogleAuthProvider|<"CALL", CallEffectDescriptor>|<"PUT", PutEffectDescriptor<{data: *, type: *}>>>}
+ */
 function* loginGoogleAccount() {
   try {
     const authProvider = yield new myFirebase.auth.GoogleAuthProvider();
@@ -99,6 +142,10 @@ function* loginGoogleAccount() {
   }
 }
 
+/**
+ * Login ny facebook account (NOT WORKING NOW)
+ * @returns {IterableIterator<IterableIterator<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>|*>|firebase.auth.FacebookAuthProvider|<"CALL", CallEffectDescriptor>|<"PUT", PutEffectDescriptor<{data: *, type: *}>>>}
+ */
 function* loginFacebookAccount() {
   try {
     const authFacebookProvider = yield new myFirebase.auth.FacebookAuthProvider();
@@ -120,6 +167,10 @@ function* loginFacebookAccount() {
   }
 }
 
+/**
+ * Log out
+ * @returns {IterableIterator<<"PUT", PutEffectDescriptor<{data: *, type: *}>>|<"PUT", PutEffectDescriptor<{type: *}>>>}
+ */
 function* logout() {
   try {
     myFirebase.auth().signOut();
@@ -177,11 +228,16 @@ function* watchVerify() {
   yield takeLatest(Types.VERIFY_REQUEST, verify);
 }
 
+function* watchSignOn() {
+  yield takeLatest(Types.SIGN_ON_REQUEST, signOn)
+}
+
 export default [
   fork(watchGetAPOD),
   fork(watchLogin),
   fork(watchLoginGoogleAccount),
   fork(watchLoginFacebookAccount),
   fork(watchLogout),
-  fork(watchVerify)
+  fork(watchVerify),
+  fork(watchSignOn)
 ];
