@@ -2,11 +2,12 @@ import {all, take, put, call, fork, takeLatest, takeEvery} from 'redux-saga/effe
 import {myFirebase, myFirestore} from "../firebase/myFirebase";
 import Types from "../constants/types";
 import User from "../models/user";
-import * as CONSTS from "../constants/constants";
+import * as CONST from "../constants/constants";
 import {watchGetAPOD} from "./APODSaga";
 
 // To apply the default browser preference.
-myFirebase.auth().useDeviceLanguage();
+const myFirebaseAuth = myFirebase.auth();
+myFirebaseAuth.useDeviceLanguage();
 
 /**
  *
@@ -18,8 +19,7 @@ myFirebase.auth().useDeviceLanguage();
  */
 function* signOn({displayName, email, password, phoneNumber}) {
   try {
-    const data = yield call([myFirebase.auth(), myFirebase.auth().createUserWithEmailAndPassword], email, password);
-    console.log("data", data);
+    const data = yield call([myFirebaseAuth, myFirebaseAuth.createUserWithEmailAndPassword], email, password);
     if (data) {
       const user = User.mappingObject(data.user);
       yield progressFirebaseCloudStore(Object.assign({}, {...user}, {displayName, phoneNumber}), true);
@@ -41,11 +41,15 @@ function* signOn({displayName, email, password, phoneNumber}) {
  */
 function* login({email, password}) {
   try {
-    const data = yield call([myFirebase.auth(), myFirebase.auth().signInWithEmailAndPassword], email, password);
+    const data = yield call([myFirebaseAuth, myFirebaseAuth.signInWithEmailAndPassword], email, password);
     if (data) {
       const user = User.mappingObject(data.user);
-      yield progressFirebaseCloudStore(user);
-      yield put({type: Types.LOGIN_SUCCESS, data: user});
+      const userDB = yield progressFirebaseCloudStore(user);
+      const u = {...user, ...userDB};
+      console.log("u: ", u)
+      console.log("userDB: ", userDB)
+      console.log("user: ", user)
+      yield put({type: Types.LOGIN_SUCCESS, data: u});
     } else {
       yield put({type: Types.LOGIN_FAILURE, data: data});
     }
@@ -58,17 +62,18 @@ function* login({email, password}) {
 /**
  *
  * @param user Object
+ * @param keepNotSaveLocal: using when we do not want save user to local storage
  * @returns {IterableIterator<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>|*>}
  */
 function* progressFirebaseCloudStore(user, keepNotSaveLocal) {
-  console.log("User progressFirebaseCloudStore", user);
-  const userDocRef = yield myFirestore.collection(CONSTS.USERS).doc(user.uid);
+  const userDocRef = yield myFirestore.collection(CONST.USERS).doc(user.uid);
   const doc = yield userDocRef.get();
   if (doc.exists) {
     const data = doc.data();
     if (data) {
       setUserToLocalStorage({...user, ...data});
     }
+    return data;
   } else {
     try {
       const result = {
@@ -83,6 +88,7 @@ function* progressFirebaseCloudStore(user, keepNotSaveLocal) {
       console.error("Can not set data to firebase", e.message);
       throw e;
     }
+    return null;
   }
 }
 
@@ -92,12 +98,12 @@ function* progressFirebaseCloudStore(user, keepNotSaveLocal) {
  */
 function setUserToLocalStorage(user) {
   try {
-    localStorage.setItem(CONSTS.ID, user.uid || "");
-    localStorage.setItem(CONSTS.DISPLAY_NAME, user.displayName || user.email);
-    localStorage.setItem(CONSTS.PHOTO_URL, user.photoURL || "");
-    localStorage.setItem(CONSTS.DESCRIPTION, user.des || "");
-    localStorage.setItem(CONSTS.ACCESS_TOKEN, user.accessToken || "");
-    localStorage.setItem(CONSTS.REFRESH_TOKEN, user.refreshToken || "");
+    localStorage.setItem(CONST.ID, user.uid || "");
+    localStorage.setItem(CONST.DISPLAY_NAME, user.displayName || user.email);
+    localStorage.setItem(CONST.PHOTO_URL, user.photoURL || "");
+    localStorage.setItem(CONST.DESCRIPTION, user.des || "");
+    localStorage.setItem(CONST.ACCESS_TOKEN, user.accessToken || "");
+    localStorage.setItem(CONST.REFRESH_TOKEN, user.refreshToken || "");
   } catch (e) {
     console.error('Can not using localStorage', e);
     throw e;
@@ -109,12 +115,12 @@ function setUserToLocalStorage(user) {
  */
 function cleanUserLocalStorage() {
   try {
-    localStorage.removeItem(CONSTS.ID);
-    localStorage.removeItem(CONSTS.DISPLAY_NAME);
-    localStorage.removeItem(CONSTS.PHOTO_URL);
-    localStorage.removeItem(CONSTS.DESCRIPTION);
-    localStorage.removeItem(CONSTS.ACCESS_TOKEN);
-    localStorage.removeItem(CONSTS.REFRESH_TOKEN);
+    localStorage.removeItem(CONST.ID);
+    localStorage.removeItem(CONST.DISPLAY_NAME);
+    localStorage.removeItem(CONST.PHOTO_URL);
+    localStorage.removeItem(CONST.DESCRIPTION);
+    localStorage.removeItem(CONST.ACCESS_TOKEN);
+    localStorage.removeItem(CONST.REFRESH_TOKEN);
   } catch (e) {
     console.error('Can not using localStorage', e);
     throw e;
@@ -128,11 +134,11 @@ function cleanUserLocalStorage() {
 function* loginGoogleAccount() {
   try {
     const authProvider = yield new myFirebase.auth.GoogleAuthProvider();
-    const data = yield call([myFirebase.auth(), myFirebase.auth().signInWithPopup], authProvider);
+    const data = yield call([myFirebaseAuth, myFirebaseAuth.signInWithPopup], authProvider);
     if (data) {
       const user = User.mappingObject(data.user);
-      yield progressFirebaseCloudStore(user);
-      yield put({type: Types.LOGIN_SUCCESS, data: user});
+      const userDB = yield progressFirebaseCloudStore(user);
+      yield put({type: Types.LOGIN_SUCCESS, data: {...user, ...userDB}});
     } else {
       yield put({type: Types.LOGIN_FAILURE, data: data});
     }
@@ -153,11 +159,11 @@ function* loginFacebookAccount() {
     authFacebookProvider.setCustomParameters({
       'display': 'popup'
     });
-    const data = yield call([myFirebase.auth(), myFirebase.auth().signInWithPopup], authFacebookProvider);
+    const data = yield call([myFirebaseAuth, myFirebaseAuth.signInWithPopup], authFacebookProvider);
     if (data) {
       const user = User.mappingObject(data.user);
-      yield progressFirebaseCloudStore(user);
-      yield put({type: Types.LOGIN_SUCCESS, data: user});
+      const userDB = yield progressFirebaseCloudStore(user);
+      yield put({type: Types.LOGIN_SUCCESS, data: {...user, ...userDB}});
     } else {
       yield put({type: Types.LOGIN_FAILURE, data: data});
     }
@@ -173,7 +179,7 @@ function* loginFacebookAccount() {
  */
 function* logout() {
   try {
-    myFirebase.auth().signOut();
+    myFirebaseAuth.signOut();
     //TODO: Should clear cookie firebase if any
     cleanUserLocalStorage();
     yield put({type: Types.LOGOUT_SUCCESS});
@@ -192,16 +198,18 @@ function* logout() {
  */
 function* verify(dispatch) {
   const promise = new Promise(resolve => {
-    myFirebase.auth().onAuthStateChanged((user) => {
+    myFirebaseAuth.onAuthStateChanged((user) => {
       resolve(user);
     });
   });
   
   
-  const user = yield promise;
-  if(user) {
+  const userData = yield promise;
+  if(userData) {
+    const user = User.mappingObject(userData);
+    const userDB = yield progressFirebaseCloudStore(user);
     // User is signed in.
-    yield put({type: Types.VERIFY_SUCCESS, data: User.mappingObject(user)});
+    yield put({type: Types.VERIFY_SUCCESS, data: {...user, ...userDB}});
   } else {
     console.warn("No user is signed in.");
     yield put({type: Types.LOGIN_FAILURE});
