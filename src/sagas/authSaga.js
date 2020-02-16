@@ -46,9 +46,6 @@ function* login({email, password}) {
       const user = User.mappingObject(data.user);
       const userDB = yield progressFirebaseCloudStore(user);
       const u = {...user, ...userDB};
-      console.log("u: ", u)
-      console.log("userDB: ", userDB)
-      console.log("user: ", user)
       yield put({type: Types.LOGIN_SUCCESS, data: u});
     } else {
       yield put({type: Types.LOGIN_FAILURE, data: data});

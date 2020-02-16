@@ -26,4 +26,12 @@
       font-size: $fontSmall;
     }
   }
+  >button {
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    &:focus {
+      box-shadow: none;
+    }
+  }
 }

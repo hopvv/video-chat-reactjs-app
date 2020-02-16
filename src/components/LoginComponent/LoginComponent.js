@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {login, loginGoogleAccount, loginFacebookAccount} from "../../actions/AuthActions";
 import {connect} from "react-redux";
 import {CUSTOM_CONFIG_LOGIN} from "../../constants/config";
-import {pathSignUp, pathHomePage} from "../../constants/routesConstant";
+import {pathSignUp} from "../../constants/routesConstant";
 
 class LoginComponent extends React.Component {
   constructor(props) {
@@ -12,7 +12,6 @@ class LoginComponent extends React.Component {
     this.state = {
       email: "",
       password: "",
-      hasLoggedIn: false
     };
     this.handleProcessLoginGoogleAccount = this.handleProcessLoginGoogleAccount.bind(this);
     this.handleProcessLoginFacebookAccount = this.handleProcessLoginFacebookAccount.bind(this);
@@ -20,25 +19,6 @@ class LoginComponent extends React.Component {
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.handleSignUpNewAccount = this.handleSignUpNewAccount.bind(this);
-  }
-  
-  static getDerivedStateFromProps(props, state) {
-    const newState = {};
-    if (!state.hasLoggedIn && props.authReducer.loggedIn) {
-      newState.hasLoggedIn = true;
-    }
-    if (props.authReducer.loggedIn && (!state.hasLoggedIn || !newState.hasLoggedIn)) {
-      props.history.push(pathHomePage);
-      return null;
-    }
-    
-    if (Object.keys(newState).length > 0) {
-      return newState;
-    }
-    return null;
-  }
-  
-  componentDidUpdate(prevProps, prevState, snapshot) {
   }
   
   async handleProcessLoginGoogleAccount() {

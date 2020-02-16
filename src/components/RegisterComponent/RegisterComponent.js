@@ -1,11 +1,17 @@
 import React from "react";
 import "./styles.scss";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {login, loginGoogleAccount, signOn} from "../../actions/AuthActions";
 import {connect} from "react-redux";
 import {pathLoginPage} from "../../constants/routesConstant";
-import {MIN_LENGTH_USER_NAME, MIN_LENGTH_PASSWORD, MIN_LENGTH_PHONE_NUMBER} from "../../constants/config";
+import {
+  MIN_LENGTH_PHONE_NUMBER,
+  USER_NAME_REGEX, MAX_LENGTH_USER_NAME, PASSWORD_REGEX, EMAIL_REGEX
+} from "../../constants/config";
 import cn from "classnames";
+import HelperButton from "../buttons/HelperButton";
+import Tooltip from "react-bootstrap/Tooltip";
+import {Button} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 class RegisterComponent extends React.Component {
   constructor(props) {
@@ -18,7 +24,8 @@ class RegisterComponent extends React.Component {
       inValidDisplayName: false,
       inValidEmail: false,
       inValidPassword: false,
-      inValidPhoneNumber: false
+      inValidPhoneNumber: false,
+      signOnProcessingStatus: this.props.authReducer.signOnProcessingStatus
     };
     this.isValidDisplayName = this.isValidDisplayName.bind(this);
     this.isValidEmail = this.isValidEmail.bind(this);
@@ -33,19 +40,19 @@ class RegisterComponent extends React.Component {
   }
   
   isValidDisplayName() {
-    const invalid = !this.state.displayName || this.state.displayName.length < MIN_LENGTH_USER_NAME;
+    const invalid = !this.state.displayName.match(USER_NAME_REGEX);
     this.setState({inValidDisplayName: invalid});
     return !invalid;
   }
   
   isValidEmail() {
-    const invalid = !this.state.email;
+    const invalid = !this.state.email.match(EMAIL_REGEX);
     this.setState({inValidEmail: invalid});
     return !invalid;
   }
   
   isValidPassword() {
-    const invalid = !this.state.password || this.state.password.length < MIN_LENGTH_PASSWORD;
+    const invalid = !this.state.password.match(PASSWORD_REGEX);
     this.setState({inValidPassword: invalid});
     return !invalid;
   }
@@ -57,7 +64,7 @@ class RegisterComponent extends React.Component {
   }
   
   handleSignUpNewAccount() {
-    if (!this.isValidDisplayName() || !this.isValidEmail() || !this.isValidPassword() || !this.isValidPhoneNumber()) {
+    if (!this.isValidEmail() || !this.isValidPassword() || !this.isValidDisplayName() || !this.isValidPhoneNumber()) {
       return;
     }
     this.props.signOn({
@@ -115,37 +122,7 @@ class RegisterComponent extends React.Component {
               <div className="card-body">
                 <h5 className="card-title text-center">Register new account</h5>
                 <div className="form-signup">
-                  <div className={cn("form-label-group", {"warning-wrapper": inValidDisplayName})}>
-                    <input
-                      type="name"
-                      id="inputName"
-                      className="form-control"
-                      placeholder="User name"
-                      required
-                      autoFocus
-                      autoComplete="new-password"
-                      value={this.state.displayName}
-                      onChange={this.onChangeDisplayName}
-                    />
-                    <label htmlFor="inputName">Name</label>
-                    {inValidDisplayName && <div className="warning-label">User name is incorrect</div>}
-                  </div>
-  
-                  <div className={cn("form-label-group", {"warning-wrapper": inValidPassword})}>
-                    <input
-                      type="password"
-                      id="inputPassword"
-                      className="form-control"
-                      placeholder="Password"
-                      required
-                      autoComplete="new-password"
-                      value={this.state.password}
-                      onChange={this.onChangePassword}
-                    />
-                    <label htmlFor="inputPassword">Password</label>
-                    {inValidPassword && <div className="warning-label">Password is incorrect</div>}
-                  </div>
-  
+                  
                   <div className={cn("form-label-group", {"warning-wrapper": inValidEmail})}>
                     <input
                       type="email"
@@ -159,8 +136,79 @@ class RegisterComponent extends React.Component {
                     />
                     <label htmlFor="inputEmail">Email</label>
                     {inValidEmail && <div className="warning-label">Email is incorrect</div>}
+                    {inValidEmail && <HelperButton
+                      overlay={(props) => {
+                        return (<Tooltip {...props} show={props.show.toString()}>
+                          <ul style={{listStylePosition: "inside", textAlign: "start"}}>
+                            <li>From 5 to 32 characters in email name</li>
+                            <li>Has to start by character, not number</li>
+                            <li>Allow a-z, A-Z, number, '._' for name email</li>
+                          </ul>
+                        </Tooltip>);
+                      }}
+                    >
+                      <Button variant=""><FontAwesomeIcon icon={['fas', 'question-circle']}/></Button>
+                    </HelperButton>}
                   </div>
-  
+                  
+                  <div className={cn("form-label-group", {"warning-wrapper": inValidPassword})}>
+                    <input
+                      type="password"
+                      id="inputPassword"
+                      className="form-control"
+                      placeholder="Password"
+                      required
+                      autoComplete="new-password"
+                      value={this.state.password}
+                      onChange={this.onChangePassword}
+                    />
+                    <label htmlFor="inputPassword">Password</label>
+                    {inValidPassword && <div className="warning-label">Password is incorrect</div>}
+                    {inValidPassword && <HelperButton
+                      overlay={(props) => {
+                        return (<Tooltip {...props} show={props.show.toString()}>
+                          <ul style={{listStylePosition: "inside", textAlign: "start"}}>
+                            <li>From 8 - 30 characters</li>
+                            <li>Allow a-z, A-Z, number, do not allow some of chars #$^+=!*()@%&</li>
+                          </ul>
+                        </Tooltip>);
+                      }}
+                    >
+                      <Button variant=""><FontAwesomeIcon icon={['fas', 'question-circle']}/></Button>
+                    </HelperButton>}
+                  </div>
+                  
+                  <div className={cn("form-label-group", {"warning-wrapper": inValidDisplayName})}>
+                    <input
+                      type="name"
+                      id="inputName"
+                      className="form-control"
+                      placeholder="User name"
+                      required
+                      autoFocus
+                      autoComplete="new-password"
+                      value={this.state.displayName}
+                      onChange={this.onChangeDisplayName}
+                      maxLength={MAX_LENGTH_USER_NAME}
+                    />
+                    <label htmlFor="inputName">Display name</label>
+                    {inValidDisplayName && <div className="warning-label">User name is incorrect</div>}
+                    {inValidDisplayName && <HelperButton
+                      overlay={(props) => {
+                        return (<Tooltip {...props} show={props.show.toString()}>
+                          <ul style={{listStylePosition: "inside", textAlign: "start"}}>
+                            <li>From 6 - 12 characters</li>
+                            <li>No _ or . at the beginning</li>
+                            <li>No __ or _. or ._ or .. inside</li>
+                            <li>No _ or . at the end</li>
+                          </ul>
+                        </Tooltip>);
+                      }}
+                    >
+                      <Button variant=""><FontAwesomeIcon icon={['fas', 'question-circle']}/></Button>
+                    </HelperButton>}
+                  </div>
+                  
                   <div className={cn("form-label-group", {"warning-wrapper": inValidPhoneNumber})}>
                     <input
                       type="number"
@@ -174,6 +222,18 @@ class RegisterComponent extends React.Component {
                     />
                     <label htmlFor="inputPhoneNumber">Phone number</label>
                     {inValidPhoneNumber && <div className="warning-label">Phone number is incorrect</div>}
+                    {inValidPhoneNumber && <HelperButton
+                      overlay={(props) => {
+                        return (<Tooltip {...props} show={props.show.toString()}>
+                          <ul style={{listStylePosition: "inside", textAlign: "start"}}>
+                            <li>Minimum 9 characters</li>
+                            <li>Only allow number</li>
+                          </ul>
+                        </Tooltip>);
+                      }}
+                    >
+                      <Button variant=""><FontAwesomeIcon icon={['fas', 'question-circle']}/></Button>
+                    </HelperButton>}
                   </div>
                   
                   <hr className="my-4"/>
@@ -184,7 +244,7 @@ class RegisterComponent extends React.Component {
                   >
                     Register
                   </button>
-  
+                  
                   <hr className="my-4"/>
                   
                   <button
@@ -193,7 +253,7 @@ class RegisterComponent extends React.Component {
                   >
                     Have an account?
                   </button>
-                  
+                
                 </div>
               </div>
             </div>

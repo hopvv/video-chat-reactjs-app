@@ -11,7 +11,7 @@ import {myFirebase} from './firebase/myFirebase';
 import {verify} from "./actions/AuthActions";
 import LoadingPage from "./components/LoadingPage/LoadingPage";
 import NavBarView from "./views/NavBarView";
-import {pathLoginPage, pathSignUp} from "./constants/routesConstant";
+import {pathHomePage, pathLoginPage, pathSignUp} from "./constants/routesConstant";
 
 // any of the brand icons in package may be referenced by icon name as a string anywhere else in our app
 library.add(fas, fab);
@@ -19,7 +19,28 @@ library.add(fas, fab);
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      signInProcessingStatus: this.props.authReducer.signInProcessingStatus,
+      signOnProcessingStatus: this.props.authReducer.signOnProcessingStatus,
+    };
     this.getSwitchRouter = this.getSwitchRouter.bind(this);
+  }
+  
+  static getDerivedStateFromProps(props, state) {
+    const newState = {};
+    if (props.authReducer.signInProcessingStatus !== state.signInProcessingStatus) {
+      newState.signInProcessingStatus = props.authReducer.signInProcessingStatus;
+      props.history.push(pathHomePage);
+    }
+    if (props.authReducer.signOnProcessingStatus !== state.signOnProcessingStatus) {
+      newState.signOnProcessingStatus = props.authReducer.signOnProcessingStatus;
+      props.history.push(pathLoginPage);
+    }
+    
+    if (Object.keys(newState).length > 0) {
+      return newState;
+    }
+    return null;
   }
   
   componentDidMount() {

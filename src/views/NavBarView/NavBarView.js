@@ -3,7 +3,6 @@ import {Navbar, Nav, NavDropdown} from "react-bootstrap";
 import {connect} from "react-redux";
 import {pathLogoutPage, pathProfile, pathHomePage, pathAbout} from "../../constants/routesConstant";
 import cn from "classnames";
-import NavLink from "react-bootstrap/NavLink";
 import {withRouter} from "react-router-dom";
 import "./styles.scss";
 
@@ -38,7 +37,13 @@ class NavBarView extends React.PureComponent {
           </Nav>
           <Nav className="mr-3">
             <NavDropdown title={this.props.authReducer.displayName} id="collasible-nav-dropdown" className="custom-nav-dropdown-right">
-              <NavDropdown.Item href={pathProfile}>Update profile</NavDropdown.Item>
+              <CustomDropdownItem
+                onClick={() => {
+                  this.props.history.push(pathProfile)
+                }}
+              >
+                Update profile
+              </CustomDropdownItem>
               <NavDropdown.Divider/>
               <CustomDropdownItem
                 onClick={() => {

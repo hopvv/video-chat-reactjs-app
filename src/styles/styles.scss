@@ -40,6 +40,20 @@ input:focus, textarea:focus, select:focus {
   outline-offset: 0;
 }
 
+/**
+ * we hide arrow on hover in-out side of input
+ */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
 :focus {
   outline: -webkit-focus-ring-color auto 0;
 }
