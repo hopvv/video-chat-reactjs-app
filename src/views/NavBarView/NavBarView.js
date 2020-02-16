@@ -1,7 +1,7 @@
 import React from "react";
 import {Navbar, Nav, NavDropdown} from "react-bootstrap";
 import {connect} from "react-redux";
-import {pathLogoutPage, pathProfile, pathHomePage, pathAbout} from "../../constants/routesConstant";
+import {pathLogoutPage, pathProfile, pathHomePage, pathAbout, pathFullAbout} from "../../constants/routesConstant";
 import cn from "classnames";
 import {withRouter} from "react-router-dom";
 import "./styles.scss";
@@ -14,7 +14,7 @@ class NavBarView extends React.PureComponent {
   render() {
     return (
       <Navbar className="nav-bar-customize" collapseOnSelect expand="lg" bg="dark" variant="dark" fixed="top">
-        <Navbar.Brand href={pathAbout}>CHAT SIMPLE APP Web version</Navbar.Brand>
+        <Navbar.Brand href={pathFullAbout}>CHAT SIMPLE APP Web version</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto" onSelect={() => {console.log("DMMDMDMDM")}}>
