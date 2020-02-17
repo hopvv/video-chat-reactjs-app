@@ -48,11 +48,16 @@ function* login({email, password}) {
       const u = {...user, ...userDB};
       yield put({type: Types.LOGIN_SUCCESS, data: u});
     } else {
-      yield put({type: Types.LOGIN_FAILURE, data: data});
+      if (data.code === "auth/user-not-found" || data.code === "auth/wrong-password") {
+        yield put({type: Types.LOGIN_FAILURE, data: "Your username or password is invalid!"});
+      } else {
+        yield put({type: Types.LOGIN_FAILURE, data: "There is something wrong when login. Please try again."});
+      }
     }
   } catch (error) {
     const error_message = {code: error.code, message: error.message};
-    yield put({type: Types.LOGIN_FAILURE, data: error_message});
+    console.error(error_message);
+    yield put({type: Types.LOGIN_FAILURE, data: "There is something wrong when login. Please try again."});
   }
 }
 
@@ -131,6 +136,7 @@ function cleanUserLocalStorage() {
 function* loginGoogleAccount() {
   try {
     const authProvider = yield new myFirebase.auth.GoogleAuthProvider();
+    authProvider.setCustomParameters({prompt: 'select_account'});
     const data = yield call([myFirebaseAuth, myFirebaseAuth.signInWithPopup], authProvider);
     if (data) {
       const user = User.mappingObject(data.user);
@@ -176,8 +182,9 @@ function* loginFacebookAccount() {
  */
 function* logout() {
   try {
-    myFirebaseAuth.signOut();
-    //TODO: Should clear cookie firebase if any
+    myFirebase.auth().signOut().then(() => {
+      // TODO: do something after logout success
+    });
     cleanUserLocalStorage();
     yield put({type: Types.LOGOUT_SUCCESS});
   } catch (e) {
@@ -199,7 +206,6 @@ function* verify(dispatch) {
       resolve(user);
     });
   });
-  
   
   const userData = yield promise;
   if(userData) {
@@ -236,6 +242,19 @@ function* watchVerify() {
 function* watchSignOn() {
   yield takeLatest(Types.SIGN_ON_REQUEST, signOn)
 }
+//
+// function deleteAllCookies() {
+//   const cookies = document.cookie.split(";");
+//
+//   for (let i = 0; i < cookies.length; i++) {
+//     const cookie = cookies[i];
+//     const eqPos = cookie.indexOf("=");
+//     const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+//     console.log("cookie", cookie)
+//     console.log("name", name)
+//     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+//   }
+// }
 
 export default [
   fork(watchGetAPOD),

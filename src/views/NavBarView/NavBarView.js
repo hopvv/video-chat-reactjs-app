@@ -1,10 +1,12 @@
 import React from "react";
-import {Navbar, Nav, NavDropdown} from "react-bootstrap";
+import {Navbar, Nav, NavDropdown, Button} from "react-bootstrap";
 import {connect} from "react-redux";
 import {pathLogoutPage, pathProfile, pathHomePage, pathAbout, pathFullAbout} from "../../constants/routesConstant";
 import cn from "classnames";
 import {withRouter} from "react-router-dom";
 import "./styles.scss";
+import Images from "../../themes/Images";
+import Image from "react-bootstrap/Image";
 
 class NavBarView extends React.PureComponent {
   constructor(props) {
@@ -15,9 +17,9 @@ class NavBarView extends React.PureComponent {
     return (
       <Navbar className="nav-bar-customize" collapseOnSelect expand="lg" bg="dark" variant="dark" fixed="top">
         <Navbar.Brand href={pathFullAbout}>CHAT SIMPLE APP Web version</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={undefined} id="toggle-menu-button"/>
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto" onSelect={() => {console.log("DMMDMDMDM")}}>
+          <Nav className="mr-auto">
             <CustomNavLink
               onClick={() => {
                 this.props.history.push(pathHomePage)
@@ -36,7 +38,20 @@ class NavBarView extends React.PureComponent {
             </CustomNavLink>
           </Nav>
           <Nav className="mr-3">
-            <NavDropdown title={this.props.authReducer.displayName} id="collasible-nav-dropdown" className="custom-nav-dropdown-right">
+            <NavDropdown
+              title={
+                <div className="user-box">
+                  <Image
+                    style={{width: "35px", height: "35px"}}
+                    roundedCircle
+                    src={this.props.authReducer.photoURL ? this.props.authReducer.photoURL : Images.noProfile}
+                  />
+                  <span className="nav-link active">{this.props.authReducer.displayName}</span>
+                </div>
+              }
+              id="collasible-nav-dropdown"
+              className="custom-nav-dropdown-right"
+            >
               <CustomDropdownItem
                 onClick={() => {
                   this.props.history.push(pathProfile)
@@ -70,7 +85,11 @@ const CustomNavLink = ({classNameLink, onClick, children, active}) => {
   return (
     <div
       className={cn("nav-link", {[classNameLink]: classNameLink, "active": active})}
-      onClick={onClick}>
+      onClick={() => {
+        document.getElementById("toggle-menu-button").click();
+        onClick();
+      }}
+    >
       {children}
     </div>
   );
@@ -80,7 +99,11 @@ const CustomDropdownItem = ({classNameItem, onClick, children}) => {
   return (
     <div
       className={cn("dropdown-item", {[classNameItem]: classNameItem})}
-      onClick={onClick}>
+      onClick={() => {
+        document.getElementById("toggle-menu-button").click();
+        onClick();
+      }}
+    >
       {children}
     </div>
   );

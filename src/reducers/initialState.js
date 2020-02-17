@@ -8,5 +8,6 @@ export default {
     loggedIn: false,
     signOnProcessingStatus: false,
     signInProcessingStatus: false,
+    messageAuth: ""
   }))
 }

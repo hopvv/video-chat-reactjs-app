@@ -5,6 +5,7 @@ import {login, loginGoogleAccount, loginFacebookAccount} from "../../actions/Aut
 import {connect} from "react-redux";
 import {CUSTOM_CONFIG_LOGIN} from "../../constants/config";
 import {pathSignUp} from "../../constants/routesConstant";
+import Alert from "react-bootstrap/Alert";
 
 class LoginComponent extends React.Component {
   constructor(props) {
@@ -83,10 +84,9 @@ class LoginComponent extends React.Component {
                     <label htmlFor="inputPassword">Password</label>
                   </div>
                   
-                  {/*<div className="custom-control custom-checkbox mb-3">*/}
-                  {/*  <input type="checkbox" className="custom-control-input" id="customCheck1"/>*/}
-                  {/*    <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>*/}
-                  {/*</div>*/}
+                  {this.props.authReducer.messageAuth &&
+                    <Alert variant='warning'>{this.props.authReducer.messageAuth}</Alert>
+                  }
                   
                   <hr className="my-4"/>
                   

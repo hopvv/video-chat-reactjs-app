@@ -131,10 +131,11 @@ class RegisterComponent extends React.Component {
                       className="form-control"
                       placeholder="Input you email"
                       required
+                      autoFocus
                       value={this.state.email}
                       onChange={this.onChangeEmail}
                     />
-                    <label htmlFor="inputEmail">Email</label>
+                    <label htmlFor="inputEmail">Email address</label>
                     {inValidEmail && <div className="warning-label">Email is incorrect</div>}
                     {inValidEmail && <HelperButton
                       overlay={(props) => {
@@ -185,7 +186,6 @@ class RegisterComponent extends React.Component {
                       className="form-control"
                       placeholder="User name"
                       required
-                      autoFocus
                       autoComplete="new-password"
                       value={this.state.displayName}
                       onChange={this.onChangeDisplayName}

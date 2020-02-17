@@ -31,7 +31,7 @@ class App extends React.Component {
     if (props.authReducer.signInProcessingStatus !== state.signInProcessingStatus) {
       newState.signInProcessingStatus = props.authReducer.signInProcessingStatus;
       props.history.push(pathHomePage);
-    }
+    } else
     if (props.authReducer.signOnProcessingStatus !== state.signOnProcessingStatus) {
       newState.signOnProcessingStatus = props.authReducer.signOnProcessingStatus;
       props.history.push(pathLoginPage);
