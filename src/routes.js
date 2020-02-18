@@ -2,6 +2,8 @@ import LoginComponent from "./components/LoginComponent";
 import LogoutComponent from "./components/LogoutComponent";
 import HomePage from "./pages/HomePage";
 import RegisterComponent from "./components/RegisterComponent/RegisterComponent";
+import ProfileView from "./views/ProfileView/ProfileView";
+
 import {Route, Redirect} from "react-router-dom";
 import {
   pathLoginPage,
@@ -20,7 +22,7 @@ const routes = [
   {exact: true, path: pathLogoutPage, component: LogoutComponent},
   {exact: true, path: pathHomePage, component: HomePage, routes: [], authRequire: true},
   {exact: true, path: pathAbout, component: () => <div>ABOUT PAGE</div>},
-  {exact: true, path: pathProfile, component: () => <div>PROFILE PAGE</div>},
+  {exact: true, path: pathProfile, component: ProfileView, authRequire: true},
   {exact: true, path: pathProfiles, component: () => <div>LIST PROFILES</div>},
   {exact: true, path: pathSignUp, component: RegisterComponent},
   {exact: false, path: "*", component: () => <Redirect to={pathLoginPage}/>},
@@ -34,7 +36,7 @@ export function RouteWithSubRoutes(route) {
       path={route.path}
       exact={route.exact}
       render={props => {
-        if (route.authRequire && !route.loggedIn) {
+        if (route.authRequire && !route.loggedIn && !route.verifying) {
           return (
             <Redirect to={pathLoginPage}/>
           );

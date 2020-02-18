@@ -89,10 +89,14 @@ html {
   }
 }
 
+p {
+  margin-bottom: 1rem;
+}
+
 .app {
   max-width: $maxWidthScreen;
   margin: 0 auto;
-  padding-top: 49px; //49 is height of menu
+  padding-top: 66px; //49 is height of menu + 17px
   background: #7F7FD5;
   background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
   background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);

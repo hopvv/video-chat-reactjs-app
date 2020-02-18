@@ -12,7 +12,9 @@ export default (state = initialState.authReducer, action) => {
         .set("signInProcessingStatus", !state.signInProcessingStatus);
     }
     case Types.LOGIN_REQUEST: {
-      return state.set("loading", true).set("messageAuth", initialState.authReducer.messageAuth);
+      return state
+        .set("loading", true)
+        .set("messageAuth", initialState.authReducer.messageAuth);
     }
     case Types.LOGIN_GOOGLE_ACCOUNT_REQUEST: {
       return state.set("loading", true);
@@ -35,14 +37,24 @@ export default (state = initialState.authReducer, action) => {
       return state.set("loading", false);
     }
     case Types.VERIFY_REQUEST: {
-      return state.set("loading", true);
+      return state
+        .set("loading", true)
+        .set('verifying', true);
     }
     case Types.VERIFY_SUCCESS: {
       state = state.merge({...action.data})
+      return state
         .set("loggedIn", true)
         .set("loading", false)
-        .set("signInProcessingStatus", !state.signInProcessingStatus);
-      return state;
+        .set('verifying', false)
+        .set("verifyProcessingStatus", !state.verifyProcessingStatus);
+    }
+    case Types.VERIFY_FAILURE: {
+      return state
+        .set('loading', false)
+        .set("loggedIn", false)
+        .set('verifying', false)
+        .set("verifyProcessingStatus", !state.verifyProcessingStatus);;
     }
     
     case Types.SIGN_ON_FAILURE: {

@@ -6,7 +6,9 @@ export default {
   authReducer: Immutable(Object.assign(new User(), {
     loading: false,
     loggedIn: false,
+    verifying: false,
     signOnProcessingStatus: false,
+    verifyProcessingStatus: false,
     signInProcessingStatus: false,
     messageAuth: ""
   }))

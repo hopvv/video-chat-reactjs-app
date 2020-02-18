@@ -22,6 +22,8 @@ class App extends React.Component {
     this.state = {
       signInProcessingStatus: this.props.authReducer.signInProcessingStatus,
       signOnProcessingStatus: this.props.authReducer.signOnProcessingStatus,
+      verifyProcessingStatus: this.props.authReducer.verifyProcessingStatus,
+      backUrl: this.props.location.pathname
     };
     this.getSwitchRouter = this.getSwitchRouter.bind(this);
   }
@@ -30,11 +32,13 @@ class App extends React.Component {
     const newState = {};
     if (props.authReducer.signInProcessingStatus !== state.signInProcessingStatus) {
       newState.signInProcessingStatus = props.authReducer.signInProcessingStatus;
-      props.location.pathname === pathLoginPage && props.history.push(pathHomePage);
-    } else
-    if (props.authReducer.signOnProcessingStatus !== state.signOnProcessingStatus) {
+      (props.location.pathname === pathLoginPage || props.location.pathname === '/') && props.history.push(pathHomePage);
+    } else if (props.authReducer.signOnProcessingStatus !== state.signOnProcessingStatus) {
       newState.signOnProcessingStatus = props.authReducer.signOnProcessingStatus;
       props.history.push(pathLoginPage);
+    } else if (props.authReducer.verifyProcessingStatus !== state.verifyProcessingStatus) {
+      newState.verifyProcessingStatus = props.authReducer.verifyProcessingStatus;
+      if (props.location.pathname !== state.backUrl) props.history.replace(state.backUrl);
     }
     
     if (Object.keys(newState).length > 0) {
@@ -55,7 +59,12 @@ class App extends React.Component {
       <Switch>
         {routes && routes.length > 0 && routes.map((route, i) => {
           return (
-            <RouteWithSubRoutes key={i} {...route} loggedIn={this.props.authReducer.loggedIn} {...this.props}/>
+            <RouteWithSubRoutes
+              key={i} {...route}
+              loggedIn={this.props.authReducer.loggedIn}
+              verifying={this.props.authReducer.verifying}
+              {...this.props}
+            />
           );
         })}
       </Switch>
@@ -64,6 +73,7 @@ class App extends React.Component {
   
   renderNavBar() {
     if (
+      this.props.location.pathname === '/' ||
       this.props.location.pathname === pathLoginPage ||
       this.props.location.pathname === pathSignUp
     ) return null;
@@ -78,7 +88,8 @@ class App extends React.Component {
         {this.renderNavBar()}
         {
           this.props.authReducer.loading ?
-          <LoadingPage isFullScreen/> : this.getSwitchRouter()
+            <LoadingPage isFullScreen/> :
+            this.getSwitchRouter()
         }
       </div>
     );

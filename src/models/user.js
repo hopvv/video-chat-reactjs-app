@@ -13,6 +13,7 @@ export default class User {
     this.apiKey = ""; //user.l
     this.refreshToken = ""; //user.refreshToken
     this.accessToken = ""; //user.ma
+    this.des = "";
   }
   
   static mappingObject(_o) {
