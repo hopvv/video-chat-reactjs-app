@@ -71,6 +71,24 @@ export default (state = initialState.authReducer, action) => {
         .set("loading", false)
         .set("signOnProcessingStatus", !state.signOnProcessingStatus);
     }
+  
+    case Types.UPDATE_PROFILE_REQUEST: {
+      return state
+        .set("updatingProfile", true)
+        .set("loading", true);
+    }
+    case Types.UPDATE_PROFILE_SUCCESS: {
+      return state
+        .merge({...action.data})
+        .set("updatingProfile", false)
+        .set("loading", false);
+    }
+    case Types.UPDATE_PROFILE_FAILURE: {
+      return state
+        .set("updatingProfile", false)
+        .set("loading", false);
+    }
+    
     default:
       return state;
   }

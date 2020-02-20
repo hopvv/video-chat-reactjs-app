@@ -3,7 +3,6 @@ export default class User {
     this.displayName = "";
     this.email = "";
     this.emailVerified = false;
-    this.isAnonymous = false;
     this.phoneNumber = "";
     this.photoURL = "";
     this.uid = ""

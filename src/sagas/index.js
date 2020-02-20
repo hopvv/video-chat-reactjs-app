@@ -4,9 +4,11 @@ import {
   watchGetAPOD,
 } from "./APODSaga";
 import authSaga from "./authSaga";
+import userProfileSaga from "./userProfileSaga";
 
 export default function* root() {
   yield all([
-    ...authSaga
+    ...authSaga,
+    ...userProfileSaga
   ]);
 }

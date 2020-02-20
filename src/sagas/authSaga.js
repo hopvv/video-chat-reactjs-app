@@ -3,7 +3,6 @@ import {myFirebase, myFirestore} from "../firebase/myFirebase";
 import Types from "../constants/types";
 import User from "../models/user";
 import * as CONST from "../constants/constants";
-import {watchGetAPOD} from "./APODSaga";
 
 // To apply the default browser preference.
 const myFirebaseAuth = myFirebase.auth();
@@ -257,7 +256,6 @@ function* watchSignOn() {
 // }
 
 export default [
-  fork(watchGetAPOD),
   fork(watchLogin),
   fork(watchLoginGoogleAccount),
   fork(watchLoginFacebookAccount),

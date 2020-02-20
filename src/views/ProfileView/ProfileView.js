@@ -7,11 +7,13 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import "./styles.scss";
 import propTypes from "prop-types";
+import {updateProfile} from "../../actions/profileActions";
+import {connect} from "react-redux";
 
-function ProfileView({user = USER}) {
+function ProfileView({user, updateProfile}) {
   const [editing, setEditing] = useState(false);
   const [displayName, setDisplayName] = useState(user.displayName);
-  const [email, setEmail] = useState(user.email);
+  // const [email, setEmail] = useState(user.email);
   const [des, setDes] = useState(user.des);
   
   return (
@@ -38,21 +40,21 @@ function ProfileView({user = USER}) {
                 <Card.Title>{displayName}</Card.Title>
               }
   
-              {editing ?
-                <InputGroup className="mb-3" size="sm">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="email">@example.com</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    placeholder="Enter your email"
-                    aria-label="Email"
-                    aria-describedby="email"
-                    value={email}
-                    onChange={event => setEmail(event.target.value)}
-                  />
-                </InputGroup> :
-                <Card.Title>{email}</Card.Title>
-              }
+              {/*{editing ?*/}
+              {/*  <InputGroup className="mb-3" size="sm">*/}
+              {/*    <InputGroup.Prepend>*/}
+              {/*      <InputGroup.Text id="email">@example.com</InputGroup.Text>*/}
+              {/*    </InputGroup.Prepend>*/}
+              {/*    <FormControl*/}
+              {/*      placeholder="Enter your email"*/}
+              {/*      aria-label="Email"*/}
+              {/*      aria-describedby="email"*/}
+              {/*      value={email}*/}
+              {/*      onChange={event => setEmail(event.target.value)}*/}
+              {/*    />*/}
+              {/*  </InputGroup> :*/}
+              {/*  <Card.Title>{email}</Card.Title>*/}
+              {/*}*/}
               {editing ?
                 <InputGroup>
                   <InputGroup.Prepend>
@@ -73,7 +75,10 @@ function ProfileView({user = USER}) {
             <Card.Footer>
               <Button
                 variant="primary"
-                onClick={() => setEditing(!editing)}
+                onClick={editing ? () => {
+                  updateProfile({...user, displayName, des});
+                  setEditing(!editing);
+                } : () => setEditing(!editing)}
                 size="lg"
                 block
               >
@@ -91,7 +96,12 @@ ProfileView.propTypes = {
   user: propTypes.object
 };
 
-export default ProfileView;
+export default connect(
+  (state) => ({
+    user: state.authReducer
+  }),
+  {updateProfile}
+)(ProfileView);
 
 const USER = {
   displayName: "User9",
