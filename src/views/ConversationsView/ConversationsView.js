@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import "./styles.scss";
 import ConversationComponent from "../../components/ConversationComponent";
 
-class ConversationView extends React.PureComponent {
+class ConversationsView extends React.PureComponent {
   constructor(props) {
     super(props);
   }
@@ -40,7 +40,7 @@ class ConversationView extends React.PureComponent {
   }
 }
 
-export default ConversationView;
+export default ConversationsView;
 
 const CONV_LIST = [
   {user: {displayName: "User1", statusText: "Sometime good!", isOnline: true, photoURL: "https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg"}},
