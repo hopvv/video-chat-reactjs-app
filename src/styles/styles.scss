@@ -40,8 +40,22 @@ input:focus, textarea:focus, select:focus {
   outline-offset: 0;
 }
 
+/**
+ * we hide arrow on hover in-out side of input
+ */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
 :focus {
-  outline: -webkit-focus-ring-color auto 0;
+  outline: -webkit-focus-ring-color auto 0 !important;
 }
 
 *::-webkit-scrollbar-track {
@@ -75,9 +89,14 @@ html {
   }
 }
 
+p {
+  margin-bottom: 1rem;
+}
+
 .app {
-  max-width: 1200px;
+  max-width: $maxWidthScreen;
   margin: 0 auto;
+  padding-top: 66px; //49 is height of menu + 17px
   background: #7F7FD5;
   background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
   background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);

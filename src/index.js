@@ -9,7 +9,7 @@ import rootReducer from './reducers';
 import rootSaga from './sagas';
 import {withRouter} from "react-router-dom"
 
-import routes from "./constants/routes";
+import routes from "./routes";
 import {
   BrowserRouter
 } from "react-router-dom";

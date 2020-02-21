@@ -19,3 +19,7 @@ export function logout() {
 export function verify(userId) {
   return {type: Types.VERIFY_REQUEST}
 }
+
+export function signOn(userData) {
+  return {type: Types.SIGN_ON_REQUEST, ...userData}
+}

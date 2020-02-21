@@ -1,11 +1,11 @@
 import React from "react";
 import "./styles.scss";
-import {myFirebase} from "../../firebase/myFirebase";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {login, loginGoogleAccount, loginFacebookAccount} from "../../actions/AuthActions";
 import {connect} from "react-redux";
 import {CUSTOM_CONFIG_LOGIN} from "../../constants/config";
-import authReducer from "../../reducers/authReducer";
+import {pathSignUp} from "../../constants/routesConstant";
+import Alert from "react-bootstrap/Alert";
 
 class LoginComponent extends React.Component {
   constructor(props) {
@@ -13,7 +13,6 @@ class LoginComponent extends React.Component {
     this.state = {
       email: "",
       password: "",
-      hasLoggedIn: false
     };
     this.handleProcessLoginGoogleAccount = this.handleProcessLoginGoogleAccount.bind(this);
     this.handleProcessLoginFacebookAccount = this.handleProcessLoginFacebookAccount.bind(this);
@@ -21,25 +20,6 @@ class LoginComponent extends React.Component {
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.handleSignUpNewAccount = this.handleSignUpNewAccount.bind(this);
-  }
-  
-  static getDerivedStateFromProps(props, state) {
-    const newState = {};
-    if (!state.hasLoggedIn && props.authReducer.loggedIn) {
-      newState.hasLoggedIn = true;
-    }
-    if (props.authReducer.loggedIn && (!state.hasLoggedIn || !newState.hasLoggedIn)) {
-      props.history.push("/home-page");
-      return null;
-    }
-    
-    if (Object.keys(newState).length > 0) {
-      return newState;
-    }
-    return null;
-  }
-  
-  componentDidUpdate(prevProps, prevState, snapshot) {
   }
   
   async handleProcessLoginGoogleAccount() {
@@ -51,7 +31,7 @@ class LoginComponent extends React.Component {
   }
   
   handleSignUpNewAccount() {
-  
+    this.props.history.push(pathSignUp)
   }
   
   async handleLoginByEmail() {
@@ -104,10 +84,9 @@ class LoginComponent extends React.Component {
                     <label htmlFor="inputPassword">Password</label>
                   </div>
                   
-                  {/*<div className="custom-control custom-checkbox mb-3">*/}
-                  {/*  <input type="checkbox" className="custom-control-input" id="customCheck1"/>*/}
-                  {/*    <label className="custom-control-label" htmlFor="customCheck1">Remember password</label>*/}
-                  {/*</div>*/}
+                  {this.props.authReducer.messageAuth &&
+                    <Alert variant='warning'>{this.props.authReducer.messageAuth}</Alert>
+                  }
                   
                   <hr className="my-4"/>
                   
@@ -139,7 +118,7 @@ class LoginComponent extends React.Component {
                     className="btn btn-lg btn-light btn-block text-uppercase"
                     onClick={this.handleSignUpNewAccount}
                   >
-                    Sign up
+                    Register new account
                   </button>
                   
                 </div>

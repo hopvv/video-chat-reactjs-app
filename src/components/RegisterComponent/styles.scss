@@ -1,0 +1,37 @@
+@import "../../styles/vars";
+
+.form-signup {
+  .form-label-group {
+    input {
+      display: block;
+    }
+    label {
+
+    }
+    .warning-label {
+      display: block;
+    }
+  }
+}
+
+.form-label-group {
+  &.warning-wrapper {
+    background-color: $colorRedAlert;
+    border: 1px solid $colorRedAlert;
+    border-radius: 1.5rem 1.5rem 3rem 3rem;
+    .warning-label {
+      text-align: center;
+      color: $colorFF;
+      font-weight: $fontWeightBold;
+      font-size: $fontSmall;
+    }
+  }
+  >button {
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}

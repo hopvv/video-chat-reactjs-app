@@ -26,10 +26,12 @@ class UserAvatar extends React.PureComponent {
     const {
       onClick,
       user,
-      isOnline
+      isOnline,
+      className,
+      hideStatus
     } = this.props;
     return (
-      <div className="user-avatar" onClick={onClick}>
+      <div className={cn("user-avatar", {[className]: className})} onClick={onClick}>
         <img
           className={cn("rounded-circle user-avatar__img", {"hidden": this.state.hasError})}
           src={user.photoURL}
@@ -40,7 +42,7 @@ class UserAvatar extends React.PureComponent {
           className={cn("rounded-circle user-avatar__img", {"hidden": !this.state.hasError})}
           src={Images.noProfile}
         />
-        <span className={cn("user-avatar__online-icon", {"offline": !isOnline})}/>
+        {!hideStatus && <span className={cn("user-avatar__online-icon", {"offline": !isOnline})}/>}
       </div>
     );
   }
@@ -49,11 +51,14 @@ class UserAvatar extends React.PureComponent {
 UserAvatar.propTypes = {
   onClick: Proptypes.func,
   user: Proptypes.object,
-  isOnline: Proptypes.bool
+  isOnline: Proptypes.bool,
+  hideStatus: Proptypes.bool,
+  className: Proptypes.string,
 };
 
 UserAvatar.defaultProps = {
-  user: {}
+  user: {},
+  hideStatus: false
 };
 
 export default UserAvatar;

@@ -1,0 +1,32 @@
+@import "../../styles/vars";
+
+.custom-nav-dropdown-right {
+  .dropdown-menu {
+    left: auto;
+    right: 0;
+  }
+  .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    .user-box {
+      display: flex;
+      >img {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+.nav-bar-customize {
+  max-width: $maxWidthScreen;
+  margin: 0 auto;
+  .nav-link {
+    cursor: pointer;
+    &.active {
+      color: $colorFF;
+    }
+  }
+  .dropdown-item {
+    cursor: pointer;
+  }
+}
