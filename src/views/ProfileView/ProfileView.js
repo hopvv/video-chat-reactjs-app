@@ -13,7 +13,7 @@ import {connect} from "react-redux";
 function ProfileView({user, updateProfile}) {
   const [editing, setEditing] = useState(false);
   const [displayName, setDisplayName] = useState(user.displayName);
-  // const [email, setEmail] = useState(user.email);
+  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
   const [des, setDes] = useState(user.des);
   
   return (
@@ -39,22 +39,21 @@ function ProfileView({user, updateProfile}) {
                 </InputGroup> :
                 <Card.Title>{displayName}</Card.Title>
               }
-  
-              {/*{editing ?*/}
-              {/*  <InputGroup className="mb-3" size="sm">*/}
-              {/*    <InputGroup.Prepend>*/}
-              {/*      <InputGroup.Text id="email">@example.com</InputGroup.Text>*/}
-              {/*    </InputGroup.Prepend>*/}
-              {/*    <FormControl*/}
-              {/*      placeholder="Enter your email"*/}
-              {/*      aria-label="Email"*/}
-              {/*      aria-describedby="email"*/}
-              {/*      value={email}*/}
-              {/*      onChange={event => setEmail(event.target.value)}*/}
-              {/*    />*/}
-              {/*  </InputGroup> :*/}
-              {/*  <Card.Title>{email}</Card.Title>*/}
-              {/*}*/}
+              {editing ?
+                <InputGroup className="mb-3" size="sm">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="phoneNumber">Phone number</InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl
+                    placeholder="Enter your phone"
+                    aria-label="Phone number"
+                    aria-describedby="Phone number"
+                    value={phoneNumber}
+                    onChange={event => setPhoneNumber(event.target.value)}
+                  />
+                </InputGroup> :
+                <Card.Title>{phoneNumber}</Card.Title>
+              }
               {editing ?
                 <InputGroup>
                   <InputGroup.Prepend>

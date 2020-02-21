@@ -17,7 +17,7 @@ import {
 import React from "react";
 
 const routes = [
-  {exact: true, path: '/', component: LoginComponent, authRequire: false},
+  {exact: true, path: '/', component: HomePage, authRequire: true},
   {exact: true, path: pathLoginPage, component: LoginComponent},
   {exact: true, path: pathLogoutPage, component: LogoutComponent},
   {exact: true, path: pathHomePage, component: HomePage, routes: [], authRequire: true},
